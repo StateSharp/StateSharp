@@ -1,10 +1,10 @@
-﻿using StateSharp.Common.State;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using StateSharp.Common.State;
 
-namespace StateSharp.Common
+namespace StateSharp.Common.Services
 {
     internal static class PathService
     {
