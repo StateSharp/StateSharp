@@ -11,7 +11,7 @@ namespace StateSharp.Client
 
         public StateSharpClient()
         {
-            _state = new StateSharpObject<T>(null, null);
+            _state = new StateSharpObject<T>(null);
         }
 
         public void Subscribe(string path, Action<object> handler)

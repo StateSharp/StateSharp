@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Common.State
 {
     public class StateSharpStructure<T> : IStateSharpStructure<T> where T : struct
     {
-        private readonly IStateSharpBase _parent;
-        private readonly string _field;
         private readonly T _state;
 
-        IStateSharpBase IStateSharpBase.Parent => _parent;
-        string IStateSharpBase.Key => _field;
-        StateSharpType IStateSharpBase.Type => StateSharpType.Object;
-
+        public string Path { get; }
         public T State => _state;
 
-        public StateSharpStructure(IStateSharpBase parent, string field)
+        public StateSharpStructure(string path)
         {
-            _parent = parent;
-            _field = field;
-            _state = default;
+            Path = path;
+            //_state = default;
         }
 
         public void SubscribeOnChange(Action<T> handler)
@@ -30,17 +23,6 @@ namespace StateSharp.Common.State
         public void UnsubscribeOnChange(Action<T> handler)
         {
 
-        }
-
-        string IStateSharpBase.GetPath(List<IStateSharpBase> callers)
-        {
-            callers.Add(this);
-            return _parent.GetPath(callers);
-        }
-
-        public string GetPath()
-        {
-            return ((IStateSharpBase)this).GetPath(new List<IStateSharpBase>());
         }
     }
 }

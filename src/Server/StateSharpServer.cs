@@ -1,33 +1,29 @@
 ﻿using StateSharp.Common;
 using StateSharp.Common.State;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using StateSharp.Common.Services;
 
 namespace StateSharp.Server
 {
     internal class StateSharpServer<T> : IStateSharpManager, IStateSharpServer<T>
     {
-        IStateSharpBase IStateSharpBase.Parent => null;
-        string IStateSharpBase.Key => ((IStateSharpBase)_state).Key;
-        StateSharpType IStateSharpBase.Type => StateSharpType.Object;
-
         private readonly StateSharpObject<T> _state;
         private readonly TcpListener _listener;
 
+        public string Path { get; }
         public T State => _state.State;
 
         public StateSharpServer(string root, IPAddress ipAddress, int port)
         {
-            _state = new StateSharpObject<T>(this, root);
+            Path = root;
+            _state = new StateSharpObject<T>(root);
             _listener = new TcpListener(ipAddress, port);
         }
 
         public void SubscribeOnChange(Action<T> handler)
         {
-            Subscribe(GetPath(), x => handler((T)x));
+            Subscribe(Path, x => handler((T)x));
         }
 
         public void UnsubscribeOnChange(Action<T> handler)
@@ -53,16 +49,6 @@ namespace StateSharp.Server
         public void Stop()
         {
             _listener.Stop();
-        }
-
-        string IStateSharpBase.GetPath(List<IStateSharpBase> callers)
-        {
-            return PathService.GetPath(callers);
-        }
-
-        public string GetPath()
-        {
-            return ((IStateSharpBase)this).GetPath(new List<IStateSharpBase>());
         }
     }
 }
