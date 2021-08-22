@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StateSharp.Common.State
 {
-    public interface IStateSharpDictionary<T> : IStateSharpDictionaryBase
+    public interface IStateSharpDictionary<T> : IStateSharpDictionaryBase where T : IStateSharpBase
     {
         IReadOnlyDictionary<string, T> State { get; }
 

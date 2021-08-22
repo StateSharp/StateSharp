@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StateSharp.Common.State
 {
-    internal sealed class StateSharpDictionary<T> : IStateSharpDictionary<T>
+    internal sealed class StateSharpDictionary<T> : IStateSharpDictionary<T> where T : IStateSharpBase
     {
         private readonly IStateSharpBase _parent;
         private readonly string _field;

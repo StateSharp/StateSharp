@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StateSharp.Common.State
 {
-    public class StateSharpStructure<T> : IStateSharpStructure<T>
+    public class StateSharpStructure<T> : IStateSharpStructure<T> where T : struct
     {
         private readonly IStateSharpBase _parent;
         private readonly string _field;
