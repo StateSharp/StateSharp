@@ -12,7 +12,7 @@ namespace UnitTests.State
         public void StatePlayers()
         {
             var server = StateSharpServerConstructor.New<GameState>("State", IPAddress.Any, 8080);
-            Assert.AreEqual("State.Players", server.State.Players.GetPath());
+            Assert.AreEqual("State.Players", server.State.Players.Path);
         }
 
         [TestMethod]
@@ -20,7 +20,15 @@ namespace UnitTests.State
         {
             var server = StateSharpServerConstructor.New<GameState>("State", IPAddress.Any, 8080);
             var user1 = server.State.Players.Add("User1");
-            Assert.AreEqual("State.Players[User1]", user1.GetPath());
+            Assert.AreEqual("State.Players[User1]", user1.Path);
+        }
+
+        [TestMethod]
+        public void StatePlayersUsernamePosition()
+        {
+            var server = StateSharpServerConstructor.New<GameState>("State", IPAddress.Any, 8080);
+            var user1 = server.State.Players.Add("User1");
+            Assert.AreEqual("State.Players[User1].Position", user1.State.Position.Path);
         }
     }
 }
