@@ -1,8 +1,6 @@
-﻿using StateSharp.Common.State;
-
-namespace StateSharp.Client
+﻿namespace StateSharp.Client
 {
-    public interface IStateSharpClient<T> : IStateSharpObject<T>
+    public interface IStateSharpClient<T>
     {
 
     }

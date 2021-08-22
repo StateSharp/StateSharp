@@ -1,44 +1,45 @@
 ﻿using StateSharp.Common;
 using StateSharp.Common.State;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
 namespace StateSharp.Server
 {
-    public class StateSharpServer<T> : IStateSharpManager, IStateSharpServer<T>
+    internal class StateSharpServer<T> : IStateSharpManager, IStateSharpServer<T>
     {
-        public T State => _state.State;
-        private readonly TcpListener _listener;
+        IStateSharpBase IStateSharpBase.Parent => null;
+        string IStateSharpBase.Key => ((IStateSharpBase)_state).Key;
+        StateSharpType IStateSharpBase.Type => StateSharpType.Object;
+
         private readonly StateSharpObject<T> _state;
+        private readonly TcpListener _listener;
 
-        public StateSharpServer(IPAddress ipAddress, int port)
+        public T State => _state.State;
+
+        public StateSharpServer(string root, IPAddress ipAddress, int port)
         {
-            _state = new StateSharpObject<T>(null);
+            _state = new StateSharpObject<T>(this, root);
             _listener = new TcpListener(ipAddress, port);
-        }
-
-        public void Set(T value)
-        {
-            _state.Set(value);
         }
 
         public void SubscribeOnChange(Action<T> handler)
         {
-            Subscribe(".", x => handler((T)x));
+            Subscribe(GetPath(), x => handler((T)x));
         }
 
         public void UnsubscribeOnChange(Action<T> handler)
         {
-            _state.UnsubscribeOnChange(handler);
+            throw new NotImplementedException();
         }
 
-        public void Subscribe(string filter, Action<object> handler)
+        public void Subscribe(string path, Action<object> handler)
         {
             throw new NotImplementedException();
         }
 
-        public void Unsubscribe(string filter, Action<object> handler)
+        public void Unsubscribe(string path, Action<object> handler)
         {
             throw new NotImplementedException();
         }
@@ -51,6 +52,16 @@ namespace StateSharp.Server
         public void Stop()
         {
             _listener.Stop();
+        }
+
+        string IStateSharpBase.GetPath(List<IStateSharpBase> callers)
+        {
+            return PathService.GetPath(callers);
+        }
+
+        public string GetPath()
+        {
+            return ((IStateSharpBase)this).GetPath(new List<IStateSharpBase>());
         }
     }
 }

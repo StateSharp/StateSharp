@@ -1,4 +1,4 @@
-﻿namespace UnitTests.State
+﻿namespace State.State
 {
     public class PlayerState
     {

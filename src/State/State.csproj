@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>StateSharp.Client</AssemblyName>
-    <RootNamespace>StateSharp.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

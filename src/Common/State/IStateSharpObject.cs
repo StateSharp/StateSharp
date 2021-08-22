@@ -2,11 +2,9 @@
 
 namespace StateSharp.Common.State
 {
-    public interface IStateSharpList<T>
+    public interface IStateSharpObject<T> : IStateSharpObjectBase
     {
-        void Add(T value);
-        void Remove(T value);
-
+        T State { get; }
         void SubscribeOnChange(Action<T> handler);
         void UnsubscribeOnChange(Action<T> handler);
     }
