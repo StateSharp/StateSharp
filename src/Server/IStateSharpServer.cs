@@ -1,9 +1,8 @@
-﻿using StateSharp.Common.State;
-
-namespace StateSharp.Server
+﻿namespace StateSharp.Server
 {
-    public interface IStateSharpServer<T> : IStateSharpObject<T>
+    public interface IStateSharpServer<out T>
     {
+        T State { get; }
         void Start();
         void Stop();
     }

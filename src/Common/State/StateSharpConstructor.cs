@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StateSharp.Common.Event;
+using System;
 using System.Linq;
 
 namespace StateSharp.Common.State
@@ -6,12 +7,12 @@ namespace StateSharp.Common.State
     internal static class StateSharpConstructor
     {
 
-        internal static T Construct<T>(string path)
+        internal static T Construct<T>(IStateSharpEventManager eventManager, string path)
         {
-            return (T)Construct(typeof(T), path);
+            return (T)Construct(typeof(T), eventManager, path);
         }
 
-        internal static object Construct(Type type, string path)
+        internal static object Construct(Type type, IStateSharpEventManager eventManager, string path)
         {
             var result = Activator.CreateInstance(type);
             foreach (var property in type.GetProperties())
@@ -21,16 +22,16 @@ namespace StateSharp.Common.State
                 {
                     if (interfaces.Contains(typeof(IStateSharpDictionaryBase)))
                     {
-                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpDictionary<>).MakeGenericType(property.PropertyType.GenericTypeArguments), $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpDictionary<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else if (interfaces.Contains(typeof(IStateSharpObjectBase)))
                     {
-                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpObject<>).MakeGenericType(property.PropertyType.GenericTypeArguments), $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpObject<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else if (interfaces.Contains(typeof(IStateSharpStructureBase)))
                     {
                         Console.WriteLine(type);
-                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments), $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else
                     {

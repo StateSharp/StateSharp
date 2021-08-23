@@ -1,24 +1,28 @@
-﻿using System;
+﻿using StateSharp.Common.Event;
+using System;
 
 namespace StateSharp.Common.State
 {
-    public class StateSharpStructure<T> : IStateSharpStructure<T> where T : struct
+    internal class StateSharpStructure<T> : IStateSharpStructure<T> where T : struct
     {
+        private readonly IStateSharpEventManager _eventManager;
+
         public string Path { get; }
         public T State { get; private set; }
 
-        public StateSharpStructure(string path)
+        public StateSharpStructure(IStateSharpEventManager eventManager, string path)
         {
             Path = path;
+            _eventManager = eventManager;
             State = default;
         }
 
-        public void SubscribeOnChange(Action<T> handler)
+        public void SubscribeOnChange(Action<IStateSharpEvent> handler)
         {
 
         }
 
-        public void UnsubscribeOnChange(Action<T> handler)
+        public void UnsubscribeOnChange(Action<IStateSharpEvent> handler)
         {
 
         }

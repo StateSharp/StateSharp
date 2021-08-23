@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StateSharp.Common.Event;
+using System;
 using System.Collections.Generic;
 
 namespace StateSharp.Common.State
@@ -10,7 +11,7 @@ namespace StateSharp.Common.State
         T Add(string key);
         void Remove(string key);
 
-        void SubscribeOnChange(Action<T> handler);
-        void UnsubscribeOnChange(Action<T> handler);
+        void SubscribeOnChange(Action<IStateSharpEvent> handler);
+        void UnsubscribeOnChange(Action<IStateSharpEvent> handler);
     }
 }

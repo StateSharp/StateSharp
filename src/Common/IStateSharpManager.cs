@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace StateSharp.Common
+﻿namespace StateSharp.Common
 {
-    public interface IStateSharpManager
+    public interface IStateSharpManager<out T>
     {
-        void Subscribe(string path, Action<object> handler);
-        void Unsubscribe(string path, Action<object> handler);
+        T State { get; }
     }
 }
