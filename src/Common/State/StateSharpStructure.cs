@@ -4,15 +4,13 @@ namespace StateSharp.Common.State
 {
     public class StateSharpStructure<T> : IStateSharpStructure<T> where T : struct
     {
-        private readonly T _state;
-
         public string Path { get; }
-        public T State => _state;
+        public T State { get; private set; }
 
         public StateSharpStructure(string path)
         {
             Path = path;
-            //_state = default;
+            State = default;
         }
 
         public void SubscribeOnChange(Action<T> handler)

@@ -6,8 +6,4 @@
     <RootNamespace>StateSharp.Common</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Event\" />
-  </ItemGroup>
-
 </Project>
