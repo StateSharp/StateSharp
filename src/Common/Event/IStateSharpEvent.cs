@@ -2,6 +2,8 @@
 {
     public interface IStateSharpEvent
     {
-        
+        string Path { get; }
+        object OldValue { get; }
+        object NewValue { get; }
     }
 }

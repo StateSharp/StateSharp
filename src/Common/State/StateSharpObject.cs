@@ -19,12 +19,12 @@ namespace StateSharp.Common.State
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Subscribe(Path, handler);
         }
 
         public void UnsubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Unsubscribe(Path, handler);
         }
     }
 }

@@ -2,6 +2,7 @@
 using StateSharp.Common.State;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StateSharp.Common
 {
@@ -20,7 +21,24 @@ namespace StateSharp.Common
 
         public void Invoke(string path, IStateSharpEvent param)
         {
-
+            var matches = _handlers
+                .Where(x => x.Key.StartsWith(path))
+                .Select(x => x.Value)
+                .SelectMany(x => x)
+                .ToList();
+            var splits = path.Split('.');
+            for (var i = 1; i < splits.Length - 1; i++)
+            {
+                var p = string.Join('.', splits, 0, i);
+                if (_handlers.TryGetValue(p, out var handlers))
+                {
+                    matches.AddRange(handlers);
+                }
+            }
+            foreach (var handler in matches)
+            {
+                handler(param);
+            }
         }
 
         public void Subscribe(string path, Action<IStateSharpEvent> handler)

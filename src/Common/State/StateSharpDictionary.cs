@@ -23,42 +23,48 @@ namespace StateSharp.Common.State
 
         public T Add(string key)
         {
+            object result;
             var type = typeof(T);
             var interfaces = type.GetInterfaces();
             if (interfaces.Contains(typeof(IStateSharpDictionaryBase)))
             {
-                var result = Activator.CreateInstance(typeof(StateSharpDictionary<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-                _state.Add(key, (T)result);
-                return (T)result;
+                result = Activator.CreateInstance(typeof(StateSharpDictionary<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
             }
-            if (interfaces.Contains(typeof(IStateSharpObjectBase)))
+            else if (interfaces.Contains(typeof(IStateSharpObjectBase)))
             {
-                var result = Activator.CreateInstance(typeof(StateSharpObject<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-                _state.Add(key, (T)result);
-                return (T)result;
+                result = Activator.CreateInstance(typeof(StateSharpObject<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
             }
-            if (interfaces.Contains(typeof(IStateSharpStructureBase)))
+            else if (interfaces.Contains(typeof(IStateSharpStructureBase)))
             {
-                var result = Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-                _state.Add(key, (T)result);
-                return (T)result;
+                result = Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
             }
-            throw new Exception($"Unknown type {type}");
+            else
+            {
+                throw new Exception($"Unknown type {type}");
+            }
+            _state.Add(key, (T)result);
+            _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", null, result));
+            return (T)result;
         }
 
         public void Remove(string key)
         {
-
+            if (_state.TryGetValue(key, out var value))
+            {
+                _state.Remove(key);
+                _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", value, null));
+            }
+            throw new KeyNotFoundException(key);
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Subscribe(Path, handler);
         }
 
         public void UnsubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Unsubscribe(Path, handler);
         }
     }
 }

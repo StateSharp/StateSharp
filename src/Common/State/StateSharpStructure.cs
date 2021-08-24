@@ -17,14 +17,21 @@ namespace StateSharp.Common.State
             State = default;
         }
 
+        public void Set(T state)
+        {
+            var e = new StateSharpEvent(Path, State, state);
+            State = state;
+            _eventManager.Invoke(Path, e);
+        }
+
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Subscribe(Path, handler);
         }
 
         public void UnsubscribeOnChange(Action<IStateSharpEvent> handler)
         {
-
+            _eventManager.Unsubscribe(Path, handler);
         }
     }
 }
