@@ -1,4 +1,5 @@
 ﻿using StateSharp.Common.Event;
+using StateSharp.Common.Transaction;
 using System;
 
 namespace StateSharp.Common.State
@@ -8,6 +9,7 @@ namespace StateSharp.Common.State
         private readonly IStateSharpEventManager _eventManager;
 
         public string Path { get; }
+
         public T State { get; private set; }
 
         public StateSharpStructure(IStateSharpEventManager eventManager, string path)
@@ -22,6 +24,16 @@ namespace StateSharp.Common.State
             var e = new StateSharpEvent(Path, State, state);
             State = state;
             _eventManager.Invoke(Path, e);
+        }
+
+        public IStateSharpTransaction BeginTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Commit(IStateSharpTransaction transaction)
+        {
+            throw new NotImplementedException();
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)

@@ -1,4 +1,5 @@
 ﻿using StateSharp.Common.Event;
+using StateSharp.Common.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,6 +56,16 @@ namespace StateSharp.Common.State
                 _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", value, null));
             }
             throw new KeyNotFoundException(key);
+        }
+
+        public IStateSharpTransaction BeginTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Commit(IStateSharpTransaction transaction)
+        {
+            throw new NotImplementedException();
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)

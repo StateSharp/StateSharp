@@ -30,7 +30,6 @@ namespace StateSharp.Common.State
                     }
                     else if (interfaces.Contains(typeof(IStateSharpStructureBase)))
                     {
-                        Console.WriteLine(type);
                         property.SetValue(result, Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else
