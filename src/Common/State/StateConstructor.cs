@@ -13,7 +13,6 @@ namespace StateSharp.Core.State
 
         internal static object ConstructState(Type type, IStateEventManager eventManager, string path)
         {
-            Console.WriteLine(type);
             var result = Activator.CreateInstance(type);
             foreach (var property in type.GetProperties())
             {

@@ -8,7 +8,7 @@ namespace StateSharp.Core.State
 {
     internal sealed class StateDictionary<T> : IStateDictionary<T> where T : IStateBase
     {
-        private readonly Dictionary<string, T> _state;
+        private Dictionary<string, T> _state;
         private readonly IStateEventManager _eventManager;
 
         public string Path { get; }
@@ -18,7 +18,13 @@ namespace StateSharp.Core.State
         {
             Path = path;
             _eventManager = eventManager;
+            _state = default;
+        }
+
+        public IReadOnlyDictionary<string, T> Set()
+        {
             _state = new Dictionary<string, T>();
+            return State;
         }
 
         public T Add(string key)
@@ -36,11 +42,11 @@ namespace StateSharp.Core.State
 
         public void Remove(string key)
         {
-            if (_state.Remove(key))
+            if (_state.Remove(key) == false)
             {
-                _eventManager.Invoke($"{Path}[{key}]");
+                throw new KeyNotFoundException(key);
             }
-            throw new KeyNotFoundException(key);
+            _eventManager.Invoke($"{Path}[{key}]");
         }
 
         public void Remove(IStateTransaction transaction, string key)

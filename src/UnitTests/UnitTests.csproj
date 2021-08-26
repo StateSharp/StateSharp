@@ -22,8 +22,4 @@
     <ProjectReference Include="..\State\State.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\State\" />
-  </ItemGroup>
-
 </Project>

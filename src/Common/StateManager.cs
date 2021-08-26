@@ -7,17 +7,19 @@ using System.Linq;
 
 namespace StateSharp.Core
 {
-    public class StateManager<T> : IStateManager<T>, IStateEventManager
+    public class StateManager<T> : IStateManager<T>, IStateEventManager where T : class
     {
         private readonly Dictionary<string, List<Action<IStateEvent>>> _handlers;
         private readonly StateObject<T> _state;
 
+        public string Path => "State";
         public T State => _state.State;
 
         public StateManager()
         {
             _handlers = new Dictionary<string, List<Action<IStateEvent>>>();
-            _state = new StateObject<T>(this, "State");
+            _state = new StateObject<T>(this, Path);
+            _state.Set();
         }
 
         public IStateTransaction BeginTransaction()

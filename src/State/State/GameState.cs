@@ -4,6 +4,8 @@ namespace State.State
 {
     public class GameState
     {
-        public IStateDictionary<IStateObject<PlayerState>> Players { get; private set; }
+        public IStateStructure<int> Score { get; private set; }
+        public IStateObject<PlayerState> LocalPlayer { get; private set; }
+        public IStateDictionary<IStateObject<PlayerState>> RemotePlayers { get; private set; }
     }
 }

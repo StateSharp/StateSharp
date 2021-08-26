@@ -2,7 +2,7 @@
 
 namespace StateSharp.Client
 {
-    internal class StateClient<T> : IStateClient<T>
+    internal class StateClient<T> : IStateClient<T> where T : class
     {
         private readonly IStateManager<T> _state;
 

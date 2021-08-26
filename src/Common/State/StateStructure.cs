@@ -19,6 +19,12 @@ namespace StateSharp.Core.State
             State = default;
         }
 
+        public T Set()
+        {
+            State = default;
+            return State;
+        }
+
         public void Set(T state)
         {
             State = state;

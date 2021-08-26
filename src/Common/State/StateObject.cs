@@ -1,21 +1,27 @@
-﻿using System;
-using StateSharp.Core.Event;
+﻿using StateSharp.Core.Event;
 using StateSharp.Core.Transaction;
+using System;
 
 namespace StateSharp.Core.State
 {
-    internal sealed class StateObject<T> : IStateObject<T>
+    internal sealed class StateObject<T> : IStateObject<T> where T : class
     {
         private readonly IStateEventManager _eventManager;
 
         public string Path { get; }
-        public T State { get; }
+        public T State { get; private set; }
 
         public StateObject(IStateEventManager eventManager, string path)
         {
             Path = path;
             _eventManager = eventManager;
-            State = StateConstructor.ConstructState<T>(eventManager, Path);
+            State = default;
+        }
+
+        public T Set()
+        {
+            State = StateConstructor.ConstructState<T>(_eventManager, Path);
+            return State;
         }
 
         public IStateTransaction BeginTransaction()
