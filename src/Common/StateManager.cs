@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StateSharp.Core.Event;
+﻿using StateSharp.Core.Event;
 using StateSharp.Core.State;
 using StateSharp.Core.Transaction;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StateSharp.Core
 {
@@ -30,7 +30,7 @@ namespace StateSharp.Core
             throw new NotImplementedException();
         }
 
-        public void Invoke(string path, IStateEvent param)
+        public void Invoke(string path)
         {
             var matches = _handlers
                 .Where(x => x.Key.StartsWith(path))
@@ -48,7 +48,7 @@ namespace StateSharp.Core
             }
             foreach (var handler in matches)
             {
-                handler(param);
+                handler(new StateEvent(path));
             }
         }
 

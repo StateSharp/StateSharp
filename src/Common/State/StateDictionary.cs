@@ -1,8 +1,8 @@
-﻿using System;
+﻿using StateSharp.Core.Event;
+using StateSharp.Core.Transaction;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using StateSharp.Core.Event;
-using StateSharp.Core.Transaction;
 
 namespace StateSharp.Core.State
 {
@@ -25,7 +25,7 @@ namespace StateSharp.Core.State
         {
             var result = StateConstructor.ConstructInternal<T>(_eventManager, $"{Path}[{key}]");
             _state.Add(key, result);
-            _eventManager.Invoke(Path, new StateEvent($"{Path}[{key}]", null, result));
+            _eventManager.Invoke($"{Path}[{key}]");
             return result;
         }
 
@@ -36,10 +36,9 @@ namespace StateSharp.Core.State
 
         public void Remove(string key)
         {
-            if (_state.TryGetValue(key, out var value))
+            if (_state.Remove(key))
             {
-                _state.Remove(key);
-                _eventManager.Invoke(Path, new StateEvent($"{Path}[{key}]", value, null));
+                _eventManager.Invoke($"{Path}[{key}]");
             }
             throw new KeyNotFoundException(key);
         }

@@ -1,6 +1,6 @@
-﻿using System;
-using StateSharp.Core.Event;
+﻿using StateSharp.Core.Event;
 using StateSharp.Core.Transaction;
+using System;
 
 namespace StateSharp.Core.State
 {
@@ -21,9 +21,8 @@ namespace StateSharp.Core.State
 
         public void Set(T state)
         {
-            var e = new StateEvent(Path, State, state);
             State = state;
-            _eventManager.Invoke(Path, e);
+            _eventManager.Invoke(Path);
         }
 
         public void Set(IStateTransaction transaction, T state)

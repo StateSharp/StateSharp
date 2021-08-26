@@ -1,5 +1,5 @@
-﻿using System;
-using StateSharp.Core.Transaction;
+﻿using StateSharp.Core.Transaction;
+using System;
 
 namespace StateSharp.Core.Event
 {
@@ -7,7 +7,7 @@ namespace StateSharp.Core.Event
     {
         IStateTransaction BeginTransaction();
         void Commit(IStateTransaction transaction);
-        void Invoke(string path, IStateEvent param);
+        void Invoke(string path);
         void Subscribe(string path, Action<IStateEvent> handler);
         void Unsubscribe(string path, Action<IStateEvent> handler);
     }
