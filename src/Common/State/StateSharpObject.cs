@@ -15,17 +15,17 @@ namespace StateSharp.Common.State
         {
             Path = path;
             _eventManager = eventManager;
-            State = StateSharpConstructor.Construct<T>(eventManager, Path);
+            State = StateSharpConstructor.ConstructState<T>(eventManager, Path);
         }
 
         public IStateSharpTransaction BeginTransaction()
         {
-            throw new NotImplementedException();
+            return _eventManager.BeginTransaction();
         }
 
         public void Commit(IStateSharpTransaction transaction)
         {
-            throw new NotImplementedException();
+            _eventManager.Commit(transaction);
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)

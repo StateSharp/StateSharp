@@ -3,7 +3,6 @@ using StateSharp.Common.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace StateSharp.Common.State
 {
@@ -24,28 +23,15 @@ namespace StateSharp.Common.State
 
         public T Add(string key)
         {
-            object result;
-            var type = typeof(T);
-            var interfaces = type.GetInterfaces();
-            if (interfaces.Contains(typeof(IStateSharpDictionaryBase)))
-            {
-                result = Activator.CreateInstance(typeof(StateSharpDictionary<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-            }
-            else if (interfaces.Contains(typeof(IStateSharpObjectBase)))
-            {
-                result = Activator.CreateInstance(typeof(StateSharpObject<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-            }
-            else if (interfaces.Contains(typeof(IStateSharpStructureBase)))
-            {
-                result = Activator.CreateInstance(typeof(StateSharpStructure<>).MakeGenericType(type.GenericTypeArguments), _eventManager, $"{Path}[{key}]");
-            }
-            else
-            {
-                throw new Exception($"Unknown type {type}");
-            }
-            _state.Add(key, (T)result);
+            var result = StateSharpConstructor.ConstructInternal<T>(_eventManager, $"{Path}[{key}]");
+            _state.Add(key, result);
             _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", null, result));
-            return (T)result;
+            return result;
+        }
+
+        public T Add(IStateSharpTransaction transaction, string key)
+        {
+            throw new NotImplementedException();
         }
 
         public void Remove(string key)
@@ -58,14 +44,19 @@ namespace StateSharp.Common.State
             throw new KeyNotFoundException(key);
         }
 
-        public IStateSharpTransaction BeginTransaction()
+        public void Remove(IStateSharpTransaction transaction, string key)
         {
             throw new NotImplementedException();
         }
 
+        public IStateSharpTransaction BeginTransaction()
+        {
+            return _eventManager.BeginTransaction();
+        }
+
         public void Commit(IStateSharpTransaction transaction)
         {
-            throw new NotImplementedException();
+            _eventManager.Commit(transaction);
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)

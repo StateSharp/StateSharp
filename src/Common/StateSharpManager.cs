@@ -1,5 +1,6 @@
 ﻿using StateSharp.Common.Event;
 using StateSharp.Common.State;
+using StateSharp.Common.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,16 @@ namespace StateSharp.Common
         {
             _handlers = new Dictionary<string, List<Action<IStateSharpEvent>>>();
             _state = new StateSharpObject<T>(this, "State");
+        }
+
+        public IStateSharpTransaction BeginTransaction()
+        {
+            return new StateSharpTransaction();
+        }
+
+        public void Commit(IStateSharpTransaction transaction)
+        {
+            throw new NotImplementedException();
         }
 
         public void Invoke(string path, IStateSharpEvent param)

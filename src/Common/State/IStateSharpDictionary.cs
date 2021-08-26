@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using StateSharp.Common.Transaction;
+using System.Collections.Generic;
 
 namespace StateSharp.Common.State
 {
@@ -7,6 +8,8 @@ namespace StateSharp.Common.State
         IReadOnlyDictionary<string, T> State { get; }
 
         T Add(string key);
+        T Add(IStateSharpTransaction transaction, string key);
         void Remove(string key);
+        void Remove(IStateSharpTransaction transaction, string key);
     }
 }

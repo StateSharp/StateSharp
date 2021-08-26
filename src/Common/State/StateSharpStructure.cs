@@ -26,14 +26,19 @@ namespace StateSharp.Common.State
             _eventManager.Invoke(Path, e);
         }
 
-        public IStateSharpTransaction BeginTransaction()
+        public void Set(IStateSharpTransaction transaction, T state)
         {
             throw new NotImplementedException();
         }
 
+        public IStateSharpTransaction BeginTransaction()
+        {
+            return _eventManager.BeginTransaction();
+        }
+
         public void Commit(IStateSharpTransaction transaction)
         {
-            throw new NotImplementedException();
+            _eventManager.Commit(transaction);
         }
 
         public void SubscribeOnChange(Action<IStateSharpEvent> handler)
