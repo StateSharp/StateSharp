@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using State.State;
 using StateSharp.Server;
-using System.Net;
 
-namespace UnitTests.State
+namespace UnitTests.Core.State
 {
     [TestClass]
     public class GetPathTest
