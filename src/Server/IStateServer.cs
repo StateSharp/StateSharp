@@ -1,6 +1,6 @@
 ﻿namespace StateSharp.Server
 {
-    public interface IStateSharpServer<out T>
+    public interface IStateServer<out T>
     {
         T State { get; }
         void Start();

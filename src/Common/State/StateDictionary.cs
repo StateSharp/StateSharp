@@ -1,20 +1,20 @@
-﻿using StateSharp.Common.Event;
-using StateSharp.Common.Transaction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using StateSharp.Core.Event;
+using StateSharp.Core.Transaction;
 
-namespace StateSharp.Common.State
+namespace StateSharp.Core.State
 {
-    internal sealed class StateSharpDictionary<T> : IStateSharpDictionary<T> where T : IStateSharpBase
+    internal sealed class StateDictionary<T> : IStateDictionary<T> where T : IStateBase
     {
         private readonly Dictionary<string, T> _state;
-        private readonly IStateSharpEventManager _eventManager;
+        private readonly IStateEventManager _eventManager;
 
         public string Path { get; }
         public IReadOnlyDictionary<string, T> State => new ReadOnlyDictionary<string, T>(_state);
 
-        public StateSharpDictionary(IStateSharpEventManager eventManager, string path)
+        public StateDictionary(IStateEventManager eventManager, string path)
         {
             Path = path;
             _eventManager = eventManager;
@@ -23,13 +23,13 @@ namespace StateSharp.Common.State
 
         public T Add(string key)
         {
-            var result = StateSharpConstructor.ConstructInternal<T>(_eventManager, $"{Path}[{key}]");
+            var result = StateConstructor.ConstructInternal<T>(_eventManager, $"{Path}[{key}]");
             _state.Add(key, result);
-            _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", null, result));
+            _eventManager.Invoke(Path, new StateEvent($"{Path}[{key}]", null, result));
             return result;
         }
 
-        public T Add(IStateSharpTransaction transaction, string key)
+        public T Add(IStateTransaction transaction, string key)
         {
             throw new NotImplementedException();
         }
@@ -39,32 +39,32 @@ namespace StateSharp.Common.State
             if (_state.TryGetValue(key, out var value))
             {
                 _state.Remove(key);
-                _eventManager.Invoke(Path, new StateSharpEvent($"{Path}[{key}]", value, null));
+                _eventManager.Invoke(Path, new StateEvent($"{Path}[{key}]", value, null));
             }
             throw new KeyNotFoundException(key);
         }
 
-        public void Remove(IStateSharpTransaction transaction, string key)
+        public void Remove(IStateTransaction transaction, string key)
         {
             throw new NotImplementedException();
         }
 
-        public IStateSharpTransaction BeginTransaction()
+        public IStateTransaction BeginTransaction()
         {
             return _eventManager.BeginTransaction();
         }
 
-        public void Commit(IStateSharpTransaction transaction)
+        public void Commit(IStateTransaction transaction)
         {
             _eventManager.Commit(transaction);
         }
 
-        public void SubscribeOnChange(Action<IStateSharpEvent> handler)
+        public void SubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Subscribe(Path, handler);
         }
 
-        public void UnsubscribeOnChange(Action<IStateSharpEvent> handler)
+        public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
         }

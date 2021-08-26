@@ -1,12 +1,12 @@
-﻿namespace StateSharp.Common.Event
+﻿namespace StateSharp.Core.Event
 {
-    public class StateSharpEvent : IStateSharpEvent
+    public class StateEvent : IStateEvent
     {
         public string Path { get; }
         public object OldValue { get; }
         public object NewValue { get; }
 
-        public StateSharpEvent(string path, object oldValue, object newValue)
+        public StateEvent(string path, object oldValue, object newValue)
         {
             Path = path;
             OldValue = oldValue;

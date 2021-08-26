@@ -1,9 +1,9 @@
-﻿using StateSharp.Common.State;
+﻿using StateSharp.Core.State;
 
 namespace State.State
 {
     public class GameState
     {
-        public IStateSharpDictionary<IStateSharpObject<PlayerState>> Players { get; private set; }
+        public IStateDictionary<IStateObject<PlayerState>> Players { get; private set; }
     }
 }

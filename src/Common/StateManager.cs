@@ -1,36 +1,36 @@
-﻿using StateSharp.Common.Event;
-using StateSharp.Common.State;
-using StateSharp.Common.Transaction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StateSharp.Core.Event;
+using StateSharp.Core.State;
+using StateSharp.Core.Transaction;
 
-namespace StateSharp.Common
+namespace StateSharp.Core
 {
-    public class StateSharpManager<T> : IStateSharpManager<T>, IStateSharpEventManager
+    public class StateManager<T> : IStateManager<T>, IStateEventManager
     {
-        private readonly Dictionary<string, List<Action<IStateSharpEvent>>> _handlers;
-        private readonly StateSharpObject<T> _state;
+        private readonly Dictionary<string, List<Action<IStateEvent>>> _handlers;
+        private readonly StateObject<T> _state;
 
         public T State => _state.State;
 
-        public StateSharpManager()
+        public StateManager()
         {
-            _handlers = new Dictionary<string, List<Action<IStateSharpEvent>>>();
-            _state = new StateSharpObject<T>(this, "State");
+            _handlers = new Dictionary<string, List<Action<IStateEvent>>>();
+            _state = new StateObject<T>(this, "State");
         }
 
-        public IStateSharpTransaction BeginTransaction()
+        public IStateTransaction BeginTransaction()
         {
-            return new StateSharpTransaction();
+            return new StateTransaction();
         }
 
-        public void Commit(IStateSharpTransaction transaction)
+        public void Commit(IStateTransaction transaction)
         {
             throw new NotImplementedException();
         }
 
-        public void Invoke(string path, IStateSharpEvent param)
+        public void Invoke(string path, IStateEvent param)
         {
             var matches = _handlers
                 .Where(x => x.Key.StartsWith(path))
@@ -52,7 +52,7 @@ namespace StateSharp.Common
             }
         }
 
-        public void Subscribe(string path, Action<IStateSharpEvent> handler)
+        public void Subscribe(string path, Action<IStateEvent> handler)
         {
             if (_handlers.TryGetValue(path, out var handlers))
             {
@@ -60,14 +60,14 @@ namespace StateSharp.Common
             }
             else
             {
-                _handlers.Add(path, new List<Action<IStateSharpEvent>>
+                _handlers.Add(path, new List<Action<IStateEvent>>
                 {
                     handler,
                 });
             }
         }
 
-        public void Unsubscribe(string path, Action<IStateSharpEvent> handler)
+        public void Unsubscribe(string path, Action<IStateEvent> handler)
         {
             if (_handlers.TryGetValue(path, out var handlers))
             {

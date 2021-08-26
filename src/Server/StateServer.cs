@@ -1,19 +1,19 @@
-﻿using StateSharp.Common;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+using StateSharp.Core;
 
 namespace StateSharp.Server
 {
-    internal class StateSharpServer<T> : IStateSharpServer<T>
+    internal class StateServer<T> : IStateServer<T>
     {
-        private readonly IStateSharpManager<T> _state;
+        private readonly IStateManager<T> _state;
         private readonly TcpListener _listener;
 
         public T State => _state.State;
 
-        public StateSharpServer(IPAddress ipAddress, int port)
+        public StateServer(IPAddress ipAddress, int port)
         {
-            _state = StateSharpManagerConstructor.New<T>();
+            _state = StateManagerConstructor.New<T>();
             _listener = new TcpListener(ipAddress, port);
         }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace StateSharp.Common.Transaction
+namespace StateSharp.Core.Transaction
 {
-    public interface IStateSharpTransaction
+    public interface IStateTransaction
     {
         internal void Add(string path, Action action);
     }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "src\Server\Server
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "src\Client\Client.csproj", "{6249CB89-D55B-4C90-877F-B8D81F092523}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{39E657FF-3AFF-47DC-BB56-853A046D0BB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "src\Common\Core.csproj", "{39E657FF-3AFF-47DC-BB56-853A046D0BB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "src\UnitTests\UnitTests.csproj", "{0996B88D-188A-4969-8B6C-D79D2491B633}"
 EndProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{15FA1CDD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Srcs", "Srcs", "{88723277-0873-4145-AB6B-99A87A7A3D1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "State", "src\State\State.csproj", "{66365894-9D13-4A91-AF8A-97503F1EC311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "State", "src\State\State.csproj", "{66365894-9D13-4A91-AF8A-97503F1EC311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

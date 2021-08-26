@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>StateSharp.Core</AssemblyName>
+    <RootNamespace>StateSharp.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

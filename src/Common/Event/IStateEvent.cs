@@ -1,6 +1,6 @@
-﻿namespace StateSharp.Common.Event
+﻿namespace StateSharp.Core.Event
 {
-    public interface IStateSharpEvent
+    public interface IStateEvent
     {
         string Path { get; }
         object OldValue { get; }

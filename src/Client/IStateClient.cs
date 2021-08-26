@@ -1,6 +1,6 @@
 ﻿namespace StateSharp.Client
 {
-    public interface IStateSharpClient<out T>
+    public interface IStateClient<out T>
     {
         T State { get; }
     }

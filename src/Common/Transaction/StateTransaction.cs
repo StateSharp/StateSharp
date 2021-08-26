@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StateSharp.Common.Transaction
+namespace StateSharp.Core.Transaction
 {
-    internal class StateSharpTransaction : IStateSharpTransaction
+    internal class StateTransaction : IStateTransaction
     {
         private readonly List<Tuple<string, Action>> _actions;
 
-        public StateSharpTransaction()
+        public StateTransaction()
         {
             _actions = new List<Tuple<string, Action>>();
         }
 
-        void IStateSharpTransaction.Add(string path, Action action)
+        void IStateTransaction.Add(string path, Action action)
         {
             _actions.Add(new Tuple<string, Action>(path, action));
         }
