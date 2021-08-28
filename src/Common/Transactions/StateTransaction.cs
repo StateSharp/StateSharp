@@ -14,11 +14,11 @@ namespace StateSharp.Core.Transactions
         public T State { get; }
         IStateBase IStateTransaction<T>.Owner => _owner;
 
-        public StateTransaction(IStateBase owner, T state)
+        public StateTransaction(IStateBase owner, Func<IStateEventManager, T> constructor)
         {
             _owner = owner;
             _handlers = new Dictionary<string, List<Action<IStateEvent>>>();
-            State = state;
+            State = constructor(this);
         }
 
         public void Invoke(string path)

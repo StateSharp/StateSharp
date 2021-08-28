@@ -1,4 +1,5 @@
-﻿using StateSharp.Core.Transactions;
+﻿using StateSharp.Core.Events;
+using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core.States
 {
@@ -11,6 +12,6 @@ namespace StateSharp.Core.States
         IStateTransaction<IStateObject<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateObject<T>> transaction);
 
-        internal new IStateObject<T> Copy();
+        internal new IStateObject<T> Copy(IStateEventManager eventManager);
     }
 }

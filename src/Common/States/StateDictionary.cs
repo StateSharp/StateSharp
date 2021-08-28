@@ -5,6 +5,7 @@ using StateSharp.Core.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace StateSharp.Core.States
 {
@@ -21,6 +22,13 @@ namespace StateSharp.Core.States
             Path = path;
             _eventManager = eventManager;
             _state = default;
+        }
+
+        public StateDictionary(IStateEventManager eventManager, string path, Dictionary<string, T> state)
+        {
+            Path = path;
+            _eventManager = eventManager;
+            _state = state;
         }
 
         public IReadOnlyDictionary<string, T> Set()
@@ -49,22 +57,12 @@ namespace StateSharp.Core.States
 
         public IStateTransaction<IStateDictionary<T>> BeginTransaction()
         {
-            throw new NotImplementedException();
+            return new StateTransaction<IStateDictionary<T>>(this, em => ((IStateDictionary<T>)this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateDictionary<T>> transaction)
         {
             if (transaction.Owner != this) throw new UnknownTransactionException();
-        }
-
-        public IStateTransaction<T> BeginAddTransaction()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Commit(IStateTransaction<T> transaction)
-        {
-            throw new NotImplementedException();
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)
@@ -82,19 +80,24 @@ namespace StateSharp.Core.States
             _eventManager = eventManager;
         }
 
-        IReadOnlyList<IStateBase> IStateBase.GetFields()
+        IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
-            throw new NotImplementedException();
+            return State.Values.Cast<IStateBase>().ToList();
         }
 
-        IStateDictionary<T> IStateDictionary<T>.Copy()
+        IStateDictionary<T> IStateDictionary<T>.Copy(IStateEventManager eventManager)
         {
-            throw new NotImplementedException();
+            var state = new Dictionary<string, T>();
+            foreach (var (key, value) in State)
+            {
+                state.Add(key, (T)value.Copy(eventManager));
+            }
+            return new StateDictionary<T>(eventManager, Path, state);
         }
 
-        IStateBase IStateBase.Copy()
+        IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateDictionary<T>)this).Copy();
+            return ((IStateDictionary<T>)this).Copy(eventManager);
         }
     }
 }

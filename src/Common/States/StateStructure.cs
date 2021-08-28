@@ -21,6 +21,13 @@ namespace StateSharp.Core.States
             State = default;
         }
 
+        internal StateStructure(IStateEventManager eventManager, string path, T state)
+        {
+            Path = path;
+            _eventManager = eventManager;
+            State = state;
+        }
+
         public T Set()
         {
             State = default;
@@ -36,7 +43,7 @@ namespace StateSharp.Core.States
 
         public IStateTransaction<IStateStructure<T>> BeginTransaction()
         {
-            throw new NotImplementedException();
+            return new StateTransaction<IStateStructure<T>>(this, em => ((IStateStructure<T>)this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateStructure<T>> transaction)
@@ -59,19 +66,19 @@ namespace StateSharp.Core.States
             _eventManager = eventManager;
         }
 
-        IReadOnlyList<IStateBase> IStateBase.GetFields()
+        IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
-            throw new NotImplementedException();
+            return new List<IStateBase>();
         }
 
-        IStateStructure<T> IStateStructure<T>.Copy()
+        IStateStructure<T> IStateStructure<T>.Copy(IStateEventManager eventManager)
         {
-            throw new NotImplementedException();
+            return new StateStructure<T>(eventManager, Path, State);
         }
 
-        IStateBase IStateBase.Copy()
+        IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateStructure<T>)this).Copy();
+            return ((IStateStructure<T>)this).Copy(eventManager);
         }
     }
 }

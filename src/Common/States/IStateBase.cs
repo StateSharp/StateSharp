@@ -12,7 +12,7 @@ namespace StateSharp.Core.States
         void UnsubscribeOnChange(Action<IStateEvent> handler);
 
         internal void SetEventManager(IStateEventManager eventManager);
-        internal IReadOnlyList<IStateBase> GetFields();
-        internal IStateBase Copy();
+        internal IReadOnlyList<IStateBase> GetChildren();
+        internal IStateBase Copy(IStateEventManager eventManager);
     }
 }

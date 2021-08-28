@@ -1,4 +1,5 @@
-﻿using StateSharp.Core.Transactions;
+﻿using StateSharp.Core.Events;
+using StateSharp.Core.Transactions;
 using System.Collections.Generic;
 
 namespace StateSharp.Core.States
@@ -13,9 +14,7 @@ namespace StateSharp.Core.States
 
         IStateTransaction<IStateDictionary<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateDictionary<T>> transaction);
-        IStateTransaction<T> BeginAddTransaction();
-        void Commit(IStateTransaction<T> transaction);
 
-        internal new IStateDictionary<T> Copy();
+        internal new IStateDictionary<T> Copy(IStateEventManager eventManager);
     }
 }
