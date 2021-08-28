@@ -11,7 +11,7 @@ namespace StateSharp.Core.States
     internal sealed class StateDictionary<T> : IStateDictionary<T> where T : IStateBase
     {
         private Dictionary<string, T> _state;
-        private readonly IStateEventManager _eventManager;
+        private IStateEventManager _eventManager;
 
         public string Path { get; }
         public IReadOnlyDictionary<string, T> State => new ReadOnlyDictionary<string, T>(_state);
@@ -75,6 +75,11 @@ namespace StateSharp.Core.States
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
+        }
+
+        void IStateBase.SetEventManager(IStateEventManager eventManager)
+        {
+            _eventManager = eventManager;
         }
 
         IReadOnlyList<IStateBase> IStateBase.GetFields()

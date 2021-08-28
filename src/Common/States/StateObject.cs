@@ -9,7 +9,7 @@ namespace StateSharp.Core.States
 {
     internal sealed class StateObject<T> : IStateObject<T> where T : class
     {
-        private readonly IStateEventManager _eventManager;
+        private IStateEventManager _eventManager;
 
         public string Path { get; }
 
@@ -47,6 +47,11 @@ namespace StateSharp.Core.States
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
+        }
+
+        void IStateBase.SetEventManager(IStateEventManager eventManager)
+        {
+            _eventManager = eventManager;
         }
 
         IReadOnlyList<IStateBase> IStateBase.GetFields()

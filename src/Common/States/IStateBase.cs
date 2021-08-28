@@ -11,6 +11,7 @@ namespace StateSharp.Core.States
         void SubscribeOnChange(Action<IStateEvent> handler);
         void UnsubscribeOnChange(Action<IStateEvent> handler);
 
+        internal void SetEventManager(IStateEventManager eventManager);
         internal IReadOnlyList<IStateBase> GetFields();
         internal IStateBase Copy();
     }
