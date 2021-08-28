@@ -1,5 +1,4 @@
-﻿using StateSharp.Core.Constructors;
-using StateSharp.Core.Events;
+﻿using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
 using System;
@@ -15,11 +14,11 @@ namespace StateSharp.Core.Transactions
         public T State { get; }
         IStateBase IStateTransaction<T>.Owner => _owner;
 
-        public StateTransaction(IStateBase owner, string path)
+        public StateTransaction(IStateBase owner, T state)
         {
             _owner = owner;
             _handlers = new Dictionary<string, List<Action<IStateEvent>>>();
-            State = StateConstructor.ConstructInternal<T>(null, path);
+            State = state;
         }
 
         public void Invoke(string path)

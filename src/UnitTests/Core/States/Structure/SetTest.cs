@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Structure
+namespace StateSharp.UnitTests.Core.States.Structure
 {
     [TestClass]
     public class SetTest
@@ -10,11 +10,11 @@ namespace UnitTests.Core.States.Structure
         [TestMethod]
         public void SetScore()
         {
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.Score.Set(10);
-            Assert.IsNotNull(server.State);
-            Assert.IsNotNull(server.State.Score);
-            Assert.AreEqual(10, server.State.Score.State);
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.Score.Set(10);
+            Assert.IsNotNull(manager.State);
+            Assert.IsNotNull(manager.State.Score);
+            Assert.AreEqual(10, manager.State.Score.State);
         }
     }
 }

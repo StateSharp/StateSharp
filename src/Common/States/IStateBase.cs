@@ -1,5 +1,6 @@
 ﻿using StateSharp.Core.Events;
 using System;
+using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
@@ -9,5 +10,8 @@ namespace StateSharp.Core.States
 
         void SubscribeOnChange(Action<IStateEvent> handler);
         void UnsubscribeOnChange(Action<IStateEvent> handler);
+
+        internal IReadOnlyList<IStateBase> GetFields();
+        internal IStateBase Copy();
     }
 }

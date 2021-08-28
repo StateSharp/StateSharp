@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Object
+namespace StateSharp.UnitTests.Core.States.Object
 {
     [TestClass]
     public class SetTest
@@ -10,9 +10,9 @@ namespace UnitTests.Core.States.Object
         [TestMethod]
         public void SetLocalPlayer()
         {
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.LocalPlayer.Set();
-            Assert.IsNotNull(server.State.LocalPlayer.State);
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.LocalPlayer.Set();
+            Assert.IsNotNull(manager.State.LocalPlayer.State);
         }
     }
 }

@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States
+namespace StateSharp.UnitTests.Core.States
 {
     [TestClass]
     public class StateTest
@@ -10,11 +10,11 @@ namespace UnitTests.Core.States
         [TestMethod]
         public void GetState()
         {
-            var server = StateManagerConstructor.New<GameState>();
-            Assert.IsNotNull(server.State);
-            Assert.IsNotNull(server.State.Score);
-            Assert.IsNotNull(server.State.LocalPlayer);
-            Assert.IsNotNull(server.State.RemotePlayers);
+            var manager = StateManagerConstructor.New<GameState>();
+            Assert.IsNotNull(manager.State);
+            Assert.IsNotNull(manager.State.Score);
+            Assert.IsNotNull(manager.State.LocalPlayer);
+            Assert.IsNotNull(manager.State.RemotePlayers);
         }
     }
 }

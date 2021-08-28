@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Dictionary
+namespace StateSharp.UnitTests.Core.States.Dictionary
 {
     [TestClass]
     public class RemoveTest
@@ -10,11 +10,11 @@ namespace UnitTests.Core.States.Dictionary
         [TestMethod]
         public void RemoveRemotePlayer()
         {
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.RemotePlayers.Set();
-            server.State.RemotePlayers.Add("User1");
-            server.State.RemotePlayers.Remove("User1");
-            Assert.AreEqual(0, server.State.RemotePlayers.State.Count);
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.RemotePlayers.Set();
+            manager.State.RemotePlayers.Add("User1");
+            manager.State.RemotePlayers.Remove("User1");
+            Assert.AreEqual(0, manager.State.RemotePlayers.State.Count);
         }
     }
 }

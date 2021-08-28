@@ -2,6 +2,7 @@
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
 using System;
+using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
@@ -51,6 +52,21 @@ namespace StateSharp.Core.States
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
+        }
+
+        IReadOnlyList<IStateBase> IStateBase.GetFields()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateStructure<T> IStateStructure<T>.Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateBase IStateBase.Copy()
+        {
+            return ((IStateStructure<T>)this).Copy();
         }
     }
 }

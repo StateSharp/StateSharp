@@ -10,5 +10,7 @@ namespace StateSharp.Core.States
 
         IStateTransaction<IStateObject<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateObject<T>> transaction);
+
+        internal new IStateObject<T> Copy();
     }
 }

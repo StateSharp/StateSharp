@@ -47,14 +47,24 @@ namespace StateSharp.Core.States
             _eventManager.Invoke($"{Path}[{key}]");
         }
 
-        public IStateTransaction<T> BeginTransaction()
+        public IStateTransaction<IStateDictionary<T>> BeginTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Commit(IStateTransaction<IStateDictionary<T>> transaction)
+        {
+            if (transaction.Owner != this) throw new UnknownTransactionException();
+        }
+
+        public IStateTransaction<T> BeginAddTransaction()
         {
             throw new NotImplementedException();
         }
 
         public void Commit(IStateTransaction<T> transaction)
         {
-            if (transaction.Owner != this) throw new UnknownTransactionException();
+            throw new NotImplementedException();
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)
@@ -65,6 +75,21 @@ namespace StateSharp.Core.States
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
+        }
+
+        IReadOnlyList<IStateBase> IStateBase.GetFields()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateDictionary<T> IStateDictionary<T>.Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateBase IStateBase.Copy()
+        {
+            return ((IStateDictionary<T>)this).Copy();
         }
     }
 }

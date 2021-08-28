@@ -5,7 +5,7 @@ using StateSharp.Core;
 using StateSharp.Core.Events;
 using System;
 
-namespace UnitTests.Core.Events.Structure
+namespace StateSharp.UnitTests.Core.Events.Structure
 {
     [TestClass]
     public class SetTest
@@ -14,9 +14,9 @@ namespace UnitTests.Core.Events.Structure
         public void SetScore()
         {
             var moq = new Mock<Action<IStateEvent>>();
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.Score.SubscribeOnChange(moq.Object);
-            server.State.Score.Set(10);
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.Score.SubscribeOnChange(moq.Object);
+            manager.State.Score.Set(10);
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);
         }
     }

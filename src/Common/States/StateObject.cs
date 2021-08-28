@@ -3,6 +3,7 @@ using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
 using System;
+using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
@@ -11,6 +12,7 @@ namespace StateSharp.Core.States
         private readonly IStateEventManager _eventManager;
 
         public string Path { get; }
+
         public T State { get; private set; }
 
         public StateObject(IStateEventManager eventManager, string path)
@@ -45,6 +47,21 @@ namespace StateSharp.Core.States
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
             _eventManager.Unsubscribe(Path, handler);
+        }
+
+        IReadOnlyList<IStateBase> IStateBase.GetFields()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateObject<T> IStateObject<T>.Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateBase IStateBase.Copy()
+        {
+            return ((IStateObject<T>)this).Copy();
         }
     }
 }

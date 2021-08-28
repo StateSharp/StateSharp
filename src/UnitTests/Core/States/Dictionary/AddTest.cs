@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Dictionary
+namespace StateSharp.UnitTests.Core.States.Dictionary
 {
     [TestClass]
     public class AddTest
@@ -10,10 +10,10 @@ namespace UnitTests.Core.States.Dictionary
         [TestMethod]
         public void AddRemotePlayer()
         {
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.RemotePlayers.Set();
-            var user1 = server.State.RemotePlayers.Add("User1");
-            Assert.AreEqual(user1, server.State.RemotePlayers.State["User1"]);
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.RemotePlayers.Set();
+            var user1 = manager.State.RemotePlayers.Add("User1");
+            Assert.AreEqual(user1, manager.State.RemotePlayers.State["User1"]);
         }
     }
 }

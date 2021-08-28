@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
+using System;
 
-namespace UnitTests.Core.Events.Dictionary
+namespace StateSharp.UnitTests.Core.Events.Dictionary
 {
     [TestClass]
     public class SetTest
@@ -14,9 +14,9 @@ namespace UnitTests.Core.Events.Dictionary
         public void SetRemotePlayers()
         {
             var moq = new Mock<Action<IStateEvent>>();
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.RemotePlayers.SubscribeOnChange(moq.Object);
-            server.State.RemotePlayers.Set();
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.RemotePlayers.SubscribeOnChange(moq.Object);
+            manager.State.RemotePlayers.Set();
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);
         }
     }

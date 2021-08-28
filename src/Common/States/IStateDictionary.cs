@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using StateSharp.Core.Transactions;
+﻿using StateSharp.Core.Transactions;
+using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
@@ -11,7 +11,11 @@ namespace StateSharp.Core.States
         T Add(string key);
         void Remove(string key);
 
-        IStateTransaction<T> BeginTransaction();
+        IStateTransaction<IStateDictionary<T>> BeginTransaction();
+        void Commit(IStateTransaction<IStateDictionary<T>> transaction);
+        IStateTransaction<T> BeginAddTransaction();
         void Commit(IStateTransaction<T> transaction);
+
+        internal new IStateDictionary<T> Copy();
     }
 }

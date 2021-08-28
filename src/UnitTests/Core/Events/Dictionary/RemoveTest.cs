@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
+using System;
 
-namespace UnitTests.Core.Events.Dictionary
+namespace StateSharp.UnitTests.Core.Events.Dictionary
 {
     [TestClass]
     public class RemoveTest
@@ -14,11 +14,11 @@ namespace UnitTests.Core.Events.Dictionary
         public void RemoveUser()
         {
             var moq = new Mock<Action<IStateEvent>>();
-            var server = StateManagerConstructor.New<GameState>();
-            server.State.RemotePlayers.Set();
-            server.State.RemotePlayers.Add("User1");
-            server.State.RemotePlayers.SubscribeOnChange(moq.Object);
-            server.State.RemotePlayers.Remove("User1");
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.State.RemotePlayers.Set();
+            manager.State.RemotePlayers.Add("User1");
+            manager.State.RemotePlayers.SubscribeOnChange(moq.Object);
+            manager.State.RemotePlayers.Remove("User1");
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);
         }
     }
