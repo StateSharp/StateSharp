@@ -5,15 +5,14 @@ using StateSharp.Core;
 namespace UnitTests.Core.States.Dictionary
 {
     [TestClass]
-    public class AddTest
+    public class SetTest
     {
         [TestMethod]
-        public void AddRemotePlayer()
+        public void SetRemotePlayers()
         {
             var server = StateManagerConstructor.New<GameState>();
             server.State.RemotePlayers.Set();
-            var user1 = server.State.RemotePlayers.Add("User1");
-            Assert.AreEqual(user1, server.State.RemotePlayers.State["User1"]);
+            Assert.AreEqual(0, server.State.RemotePlayers.State.Count);
         }
     }
 }

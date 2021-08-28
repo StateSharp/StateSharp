@@ -2,7 +2,7 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Dictionary
+namespace UnitTests.Core.States
 {
     [TestClass]
     public class StateTest
@@ -11,8 +11,10 @@ namespace UnitTests.Core.States.Dictionary
         public void GetState()
         {
             var server = StateManagerConstructor.New<GameState>();
-            server.State.RemotePlayers.Set();
-            Assert.AreEqual(0, server.State.RemotePlayers.State.Count);
+            Assert.IsNotNull(server.State);
+            Assert.IsNotNull(server.State.Score);
+            Assert.IsNotNull(server.State.LocalPlayer);
+            Assert.IsNotNull(server.State.RemotePlayers);
         }
     }
 }

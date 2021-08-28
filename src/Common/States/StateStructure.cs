@@ -1,6 +1,6 @@
-﻿using System;
-using StateSharp.Core.Events;
+﻿using StateSharp.Core.Events;
 using StateSharp.Core.Transactions;
+using System;
 
 namespace StateSharp.Core.States
 {
@@ -22,6 +22,7 @@ namespace StateSharp.Core.States
         public T Set()
         {
             State = default;
+            _eventManager.Invoke(Path);
             return State;
         }
 

@@ -1,38 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
+using System;
+using System.Collections.Generic;
 
 namespace StateSharp.Core.Collections
 {
-    internal class PathTreeNode<T>
+    internal class PathTreeNode
     {
-        private readonly List<T> _values;
-        private readonly Dictionary<string, PathTreeNode<T>> _children;
+        private readonly List<Action<IStateEvent>> _values;
+        private readonly Dictionary<string, PathTreeNode> _children;
 
-        public IReadOnlyList<T> Values => _values.AsReadOnly();
-        public IReadOnlyDictionary<string, PathTreeNode<T>> Children => _children;
+        public IReadOnlyList<Action<IStateEvent>> Values => _values.AsReadOnly();
+        public IReadOnlyDictionary<string, PathTreeNode> Children => _children;
 
         internal PathTreeNode()
         {
-            _values = new List<T>();
-            _children = new Dictionary<string, PathTreeNode<T>>();
+            _values = new List<Action<IStateEvent>>();
+            _children = new Dictionary<string, PathTreeNode>();
         }
 
-        public PathTreeNode<T> AddChild(string key)
+        public PathTreeNode AddChild(string key)
         {
-            var child = new PathTreeNode<T>();
+            var child = new PathTreeNode();
             _children.Add(key, child);
             return child;
         }
 
-        public void AddValue(T value)
+        public void AddValue(Action<IStateEvent> value)
         {
             _values.Add(value);
         }
 
-        public void RemoveValue(T value)
+        public void RemoveValue(Action<IStateEvent> value)
         {
             if (_values.Remove(value) == false)
             {
-                throw new KeyNotFoundException();
+                throw new SubscriptionNotFoundException();
             }
         }
     }

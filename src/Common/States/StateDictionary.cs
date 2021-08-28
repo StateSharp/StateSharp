@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using StateSharp.Core.Constructors;
 using StateSharp.Core.Events;
 using StateSharp.Core.Transactions;
 

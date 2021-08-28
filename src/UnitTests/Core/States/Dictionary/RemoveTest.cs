@@ -8,7 +8,7 @@ namespace UnitTests.Core.States.Dictionary
     public class RemoveTest
     {
         [TestMethod]
-        public void RemoveUser()
+        public void RemoveRemotePlayer()
         {
             var server = StateManagerConstructor.New<GameState>();
             server.State.RemotePlayers.Set();

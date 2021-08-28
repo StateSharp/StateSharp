@@ -1,18 +1,21 @@
-﻿using StateSharp.Core.Services;
+﻿using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
+using StateSharp.Core.Services;
+using System;
 using System.Collections.Generic;
 
 namespace StateSharp.Core.Collections
 {
     internal class PathTree<T>
     {
-        private readonly PathTreeNode<T> _root;
+        private readonly PathTreeNode _root;
 
         internal PathTree()
         {
-            _root = new PathTreeNode<T>();
+            _root = new PathTreeNode();
         }
 
-        public void Add(string path, T value)
+        public void Add(string path, Action<IStateEvent> value)
         {
             var node = _root;
             foreach (var key in PathService.SplitPath(path))
@@ -29,20 +32,20 @@ namespace StateSharp.Core.Collections
             node.AddValue(value);
         }
 
-        public void Remove(string path, T value)
+        public void Remove(string path, Action<IStateEvent> value)
         {
             var node = _root;
             foreach (var key in PathService.SplitPath(path))
             {
-                node = node.Children.TryGetValue(key, out var child) ? child : throw new KeyNotFoundException();
+                node = node.Children.TryGetValue(key, out var child) ? child : throw new SubscriptionNotFoundException();
             }
             node.RemoveValue(value);
         }
 
-        public List<T> GetMatches(string path)
+        public List<Action<IStateEvent>> GetMatches(string path)
         {
             var node = _root;
-            var result = new List<T>();
+            var result = new List<Action<IStateEvent>>();
             foreach (var key in PathService.SplitPath(path))
             {
                 result.AddRange(node.Values);
@@ -57,7 +60,7 @@ namespace StateSharp.Core.Collections
             }
             result.AddRange(node.Values);
 
-            var queue = new Queue<PathTreeNode<T>>(node.Children.Values);
+            var queue = new Queue<PathTreeNode>(node.Children.Values);
             while (queue.TryDequeue(out var next))
             {
                 result.AddRange(next.Values);

@@ -2,19 +2,19 @@
 using State.State;
 using StateSharp.Core;
 
-namespace UnitTests.Core.States.Object
+namespace UnitTests.Core.States.Structure
 {
     [TestClass]
-    public class StateTest
+    public class SetTest
     {
         [TestMethod]
-        public void GetState()
+        public void SetScore()
         {
             var server = StateManagerConstructor.New<GameState>();
+            server.State.Score.Set(10);
             Assert.IsNotNull(server.State);
             Assert.IsNotNull(server.State.Score);
-            Assert.IsNotNull(server.State.LocalPlayer);
-            Assert.IsNotNull(server.State.RemotePlayers);
+            Assert.AreEqual(10, server.State.Score.State);
         }
     }
 }

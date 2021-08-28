@@ -1,8 +1,10 @@
-﻿using System;
+﻿using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
+using StateSharp.Core.States;
+using System;
 using System.Linq;
-using StateSharp.Core.Events;
 
-namespace StateSharp.Core.States
+namespace StateSharp.Core.Constructors
 {
     internal static class StateConstructor
     {
@@ -33,12 +35,12 @@ namespace StateSharp.Core.States
                     }
                     else
                     {
-                        throw new Exception($"Unknown type for {property.Name} in {type}");
+                        throw new UnknownStateType();
                     }
                 }
                 else
                 {
-                    throw new Exception($"Unknown type for {property.Name} in {type}");
+                    throw new InvalidStateType();
                 }
             }
             return result;
@@ -68,7 +70,7 @@ namespace StateSharp.Core.States
             }
             else
             {
-                throw new Exception($"Unknown type {type}");
+                throw new UnknownStateType();
             }
             return result;
         }

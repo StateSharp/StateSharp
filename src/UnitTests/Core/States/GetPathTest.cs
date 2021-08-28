@@ -15,14 +15,28 @@ namespace UnitTests.Core.States
         }
 
         [TestMethod]
-        public void StatePlayers()
+        public void StateScore()
+        {
+            var server = StateManagerConstructor.New<GameState>();
+            Assert.AreEqual("State.Score", server.State.Score.Path);
+        }
+
+        [TestMethod]
+        public void StateLocalPlayer()
+        {
+            var server = StateManagerConstructor.New<GameState>();
+            Assert.AreEqual("State.LocalPlayer", server.State.LocalPlayer.Path);
+        }
+
+        [TestMethod]
+        public void StateRemotePlayers()
         {
             var server = StateManagerConstructor.New<GameState>();
             Assert.AreEqual("State.RemotePlayers", server.State.RemotePlayers.Path);
         }
 
         [TestMethod]
-        public void StatePlayersUsername()
+        public void StateRemotePlayersUsername()
         {
             var server = StateManagerConstructor.New<GameState>();
             server.State.RemotePlayers.Set();
@@ -31,7 +45,7 @@ namespace UnitTests.Core.States
         }
 
         [TestMethod]
-        public void StatePlayersUsernamePosition()
+        public void StateRemotePlayersUsernamePosition()
         {
             var server = StateManagerConstructor.New<GameState>();
             server.State.RemotePlayers.Set();
