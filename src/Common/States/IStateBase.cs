@@ -1,15 +1,11 @@
-﻿using System;
-using StateSharp.Core.Events;
-using StateSharp.Core.Transactions;
+﻿using StateSharp.Core.Events;
+using System;
 
 namespace StateSharp.Core.States
 {
     public interface IStateBase
     {
         string Path { get; }
-
-        IStateTransaction BeginTransaction();
-        void Commit(IStateTransaction transaction);
 
         void SubscribeOnChange(Action<IStateEvent> handler);
         void UnsubscribeOnChange(Action<IStateEvent> handler);

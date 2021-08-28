@@ -1,8 +1,8 @@
 ﻿using StateSharp.Core.Collections;
-using System;
 using StateSharp.Core.Events;
 using StateSharp.Core.States;
 using StateSharp.Core.Transactions;
+using System;
 
 namespace StateSharp.Core
 {
@@ -19,16 +19,6 @@ namespace StateSharp.Core
             _handlers = new PathTree<Action<IStateEvent>>();
             _state = new StateObject<T>(this, Path);
             _state.Set();
-        }
-
-        public IStateTransaction BeginTransaction()
-        {
-            return new StateTransaction();
-        }
-
-        public void Commit(IStateTransaction transaction)
-        {
-            throw new NotImplementedException();
         }
 
         public void Invoke(string path)
@@ -48,6 +38,16 @@ namespace StateSharp.Core
         public void Unsubscribe(string path, Action<IStateEvent> handler)
         {
             _handlers.Remove(path, handler);
+        }
+
+        public IStateTransaction<IStateObject<T>> BeginTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Commit(IStateTransaction<IStateObject<T>> transaction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

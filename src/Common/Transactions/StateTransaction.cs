@@ -1,20 +1,57 @@
-﻿using System;
+﻿using StateSharp.Core.Constructors;
+using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
+using StateSharp.Core.States;
+using System;
 using System.Collections.Generic;
 
 namespace StateSharp.Core.Transactions
 {
-    internal class StateTransaction : IStateTransaction
+    internal class StateTransaction<T> : IStateTransaction<T>, IStateEventManager where T : IStateBase
     {
-        private readonly List<Tuple<string, Action>> _actions;
+        private readonly IStateBase _owner;
+        private readonly IDictionary<string, List<Action<IStateEvent>>> _handlers;
 
-        public StateTransaction()
+        public T State { get; }
+        IStateBase IStateTransaction<T>.Owner => _owner;
+
+        public StateTransaction(IStateBase owner, string path)
         {
-            _actions = new List<Tuple<string, Action>>();
+            _owner = owner;
+            _handlers = new Dictionary<string, List<Action<IStateEvent>>>();
+            State = StateConstructor.ConstructInternal<T>(null, path);
         }
 
-        void IStateTransaction.Add(string path, Action action)
+        public void Invoke(string path)
         {
-            _actions.Add(new Tuple<string, Action>(path, action));
+            // Do not invoke inside transaction.
+        }
+
+        public void Subscribe(string path, Action<IStateEvent> handler)
+        {
+            if (_handlers.TryGetValue(path, out var handlers))
+            {
+                handlers.Add(handler);
+            }
+            else
+            {
+                _handlers.Add(path, new List<Action<IStateEvent>>
+                {
+                    handler,
+                });
+            }
+        }
+
+        public void Unsubscribe(string path, Action<IStateEvent> handler)
+        {
+            if (_handlers.TryGetValue(path, out var handlers))
+            {
+                if (handlers.Remove(handler))
+                {
+                    return;
+                }
+            }
+            throw new SubscriptionNotFoundException();
         }
     }
 }

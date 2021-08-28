@@ -8,6 +8,8 @@ namespace StateSharp.Core.States
 
         T Set();
         void Set(T state);
-        void Set(IStateTransaction transaction, T state);
+
+        IStateTransaction<IStateStructure<T>> BeginTransaction();
+        void Commit(IStateTransaction<IStateStructure<T>> transaction);
     }
 }

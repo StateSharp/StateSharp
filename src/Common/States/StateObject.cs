@@ -1,5 +1,6 @@
 ﻿using StateSharp.Core.Constructors;
 using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
 using System;
 
@@ -26,14 +27,14 @@ namespace StateSharp.Core.States
             return State;
         }
 
-        public IStateTransaction BeginTransaction()
+        public IStateTransaction<IStateObject<T>> BeginTransaction()
         {
-            return _eventManager.BeginTransaction();
+            throw new NotImplementedException();
         }
 
-        public void Commit(IStateTransaction transaction)
+        public void Commit(IStateTransaction<IStateObject<T>> transaction)
         {
-            _eventManager.Commit(transaction);
+            if (transaction.Owner != this) throw new UnknownTransactionException();
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)

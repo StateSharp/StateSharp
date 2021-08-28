@@ -9,8 +9,9 @@ namespace StateSharp.Core.States
 
         IReadOnlyDictionary<string, T> Set();
         T Add(string key);
-        T Add(IStateTransaction transaction, string key);
         void Remove(string key);
-        void Remove(IStateTransaction transaction, string key);
+
+        IStateTransaction<T> BeginTransaction();
+        void Commit(IStateTransaction<T> transaction);
     }
 }

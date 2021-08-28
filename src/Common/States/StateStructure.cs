@@ -1,4 +1,5 @@
 ﻿using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
 using System;
 
@@ -32,19 +33,14 @@ namespace StateSharp.Core.States
             _eventManager.Invoke(Path);
         }
 
-        public void Set(IStateTransaction transaction, T state)
+        public IStateTransaction<IStateStructure<T>> BeginTransaction()
         {
             throw new NotImplementedException();
         }
 
-        public IStateTransaction BeginTransaction()
+        public void Commit(IStateTransaction<IStateStructure<T>> transaction)
         {
-            return _eventManager.BeginTransaction();
-        }
-
-        public void Commit(IStateTransaction transaction)
-        {
-            _eventManager.Commit(transaction);
+            if (transaction.Owner != this) throw new UnknownTransactionException();
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)

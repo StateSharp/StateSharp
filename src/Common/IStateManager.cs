@@ -1,13 +1,14 @@
-﻿using StateSharp.Core.Transactions;
+﻿using StateSharp.Core.States;
+using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core
 {
-    public interface IStateManager<out T> where T : class
+    public interface IStateManager<T> where T : class
     {
         string Path { get; }
         T State { get; }
 
-        IStateTransaction BeginTransaction();
-        void Commit(IStateTransaction transaction);
+        IStateTransaction<IStateObject<T>> BeginTransaction();
+        void Commit(IStateTransaction<IStateObject<T>> transaction);
     }
 }

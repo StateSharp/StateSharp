@@ -1,9 +1,10 @@
-﻿using System;
+﻿using StateSharp.Core.States;
 
 namespace StateSharp.Core.Transactions
 {
-    public interface IStateTransaction
+    public interface IStateTransaction<out T> where T : IStateBase
     {
-        internal void Add(string path, Action action);
+        public T State { get; }
+        internal IStateBase Owner { get; }
     }
 }

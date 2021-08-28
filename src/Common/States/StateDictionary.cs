@@ -1,9 +1,10 @@
-﻿using System;
+﻿using StateSharp.Core.Constructors;
+using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
+using StateSharp.Core.Transactions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using StateSharp.Core.Constructors;
-using StateSharp.Core.Events;
-using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core.States
 {
@@ -37,11 +38,6 @@ namespace StateSharp.Core.States
             return result;
         }
 
-        public T Add(IStateTransaction transaction, string key)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Remove(string key)
         {
             if (_state.Remove(key) == false)
@@ -51,19 +47,14 @@ namespace StateSharp.Core.States
             _eventManager.Invoke($"{Path}[{key}]");
         }
 
-        public void Remove(IStateTransaction transaction, string key)
+        public IStateTransaction<T> BeginTransaction()
         {
             throw new NotImplementedException();
         }
 
-        public IStateTransaction BeginTransaction()
+        public void Commit(IStateTransaction<T> transaction)
         {
-            return _eventManager.BeginTransaction();
-        }
-
-        public void Commit(IStateTransaction transaction)
-        {
-            _eventManager.Commit(transaction);
+            if (transaction.Owner != this) throw new UnknownTransactionException();
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)
