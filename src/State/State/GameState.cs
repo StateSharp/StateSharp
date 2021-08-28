@@ -1,4 +1,4 @@
-﻿using StateSharp.Core.State;
+﻿using StateSharp.Core.States;
 
 namespace State.State
 {

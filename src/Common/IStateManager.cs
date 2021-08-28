@@ -1,4 +1,4 @@
-﻿using StateSharp.Core.Transaction;
+﻿using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core
 {

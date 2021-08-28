@@ -1,8 +1,8 @@
 ﻿using StateSharp.Core.Collections;
-using StateSharp.Core.Event;
-using StateSharp.Core.State;
-using StateSharp.Core.Transaction;
 using System;
+using StateSharp.Core.Events;
+using StateSharp.Core.States;
+using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core
 {
