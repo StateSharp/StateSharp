@@ -12,7 +12,8 @@ namespace UnitTests.Core.State.Structure
         {
             var server = StateManagerConstructor.New<GameState>();
             Assert.IsNotNull(server.State);
-            Assert.IsNotNull(server.State.RemotePlayers);
+            Assert.IsNotNull(server.State.Score);
+            Assert.AreEqual(0, server.State.Score.State);
         }
     }
 }

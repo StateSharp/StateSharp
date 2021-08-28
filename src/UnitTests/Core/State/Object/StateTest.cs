@@ -12,6 +12,8 @@ namespace UnitTests.Core.State.Object
         {
             var server = StateManagerConstructor.New<GameState>();
             Assert.IsNotNull(server.State);
+            Assert.IsNotNull(server.State.Score);
+            Assert.IsNotNull(server.State.LocalPlayer);
             Assert.IsNotNull(server.State.RemotePlayers);
         }
     }

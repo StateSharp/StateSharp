@@ -24,6 +24,7 @@ namespace StateSharp.Core.State
         public IReadOnlyDictionary<string, T> Set()
         {
             _state = new Dictionary<string, T>();
+            _eventManager.Invoke(Path);
             return State;
         }
 

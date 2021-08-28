@@ -40,10 +40,32 @@ namespace StateSharp.Core
                 .SelectMany(x => x)
                 .ToList();
             var splits = path.Split('.');
-            for (var i = 1; i < splits.Length - 1; i++)
+            for (var i = 2; i <= splits.Length; i++)
             {
-                var p = string.Join('.', splits, 0, i);
-                if (_handlers.TryGetValue(p, out var handlers))
+                var p = string.Join('.', splits, 0, i - 1);
+                if (splits[i - 1].EndsWith("]"))
+                {
+                    if (_handlers.TryGetValue($"{p}.{splits[i - 1].Split('[')[0]}", out var dictHandlers))
+                    {
+                        matches.AddRange(dictHandlers);
+                    }
+                    if (_handlers.TryGetValue($"{p}.{splits[i - 1]}", out var elemHandlers))
+                    {
+                        matches.AddRange(elemHandlers);
+                    }
+                }
+                else
+                {
+                    if (_handlers.TryGetValue($"{p}.{splits[i - 1]}", out var handlers))
+                    {
+                        matches.AddRange(handlers);
+                    }
+                }
+            }
+            if (path != "State")
+            {
+
+                if (_handlers.TryGetValue("State", out var handlers))
                 {
                     matches.AddRange(handlers);
                 }
