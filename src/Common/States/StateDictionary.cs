@@ -60,6 +60,12 @@ namespace StateSharp.Core.States
             _eventManager.Invoke($"{Path}[{key}]");
         }
 
+        public void Clear()
+        {
+            _state.Clear();
+            _eventManager.Invoke(Path);
+        }
+
         public IStateTransaction<IStateDictionary<T>> BeginTransaction()
         {
             return new StateTransaction<IStateDictionary<T>>(this, em => ((IStateDictionary<T>)this).Copy(em));
@@ -113,6 +119,21 @@ namespace StateSharp.Core.States
                 state.Add(key, (T)value.Copy(eventManager));
             }
             return new StateDictionary<T>(eventManager, Path, state);
+        }
+
+        IStateBase IStateDictionary<T>.FromJson(string json)
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateBase IStateBase.FromJson(string json)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IStateBase.ToJson()
+        {
+            throw new NotImplementedException();
         }
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)

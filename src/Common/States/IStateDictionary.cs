@@ -12,10 +12,12 @@ namespace StateSharp.Core.States
         IReadOnlyDictionary<string, T> Set();
         T Add(string key);
         void Remove(string key);
+        void Clear();
 
         IStateTransaction<IStateDictionary<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateDictionary<T>> transaction);
 
         internal new IStateDictionary<T> Copy(IStateEventManager eventManager);
+        internal new IStateBase FromJson(string json);
     }
 }

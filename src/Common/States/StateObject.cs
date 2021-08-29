@@ -92,6 +92,21 @@ namespace StateSharp.Core.States
             return new StateObject<T>(eventManager, Path, CopyService.CopyState(State, eventManager));
         }
 
+        IStateBase IStateObject<T>.FromJson(string json)
+        {
+            throw new NotImplementedException();
+        }
+
+        IStateBase IStateBase.FromJson(string json)
+        {
+            throw new NotImplementedException();
+        }
+
+        string IStateBase.ToJson()
+        {
+            throw new NotImplementedException();
+        }
+
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
             return ((IStateObject<T>)this).Copy(eventManager);
