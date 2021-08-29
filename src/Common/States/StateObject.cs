@@ -20,7 +20,7 @@ namespace StateSharp.Core.States
         {
             Path = path;
             _eventManager = eventManager;
-            State = default;
+            State = StateConstructor.ConstructState<T>(eventManager, Path);
         }
 
         public StateObject(IStateEventManager eventManager, string path, T state)
@@ -45,6 +45,20 @@ namespace StateSharp.Core.States
         public void Commit(IStateTransaction<IStateObject<T>> transaction)
         {
             if (transaction.Owner != this) throw new UnknownTransactionException();
+
+            State = transaction.State.State;
+
+            var queue = new Queue<IStateBase>(((IStateBase)this).GetChildren());
+            while (queue.TryDequeue(out var state))
+            {
+                state.SetEventManager(_eventManager);
+                foreach (var child in state.GetChildren())
+                {
+                    queue.Enqueue(child);
+                }
+            }
+
+            _eventManager.Invoke(Path);
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)

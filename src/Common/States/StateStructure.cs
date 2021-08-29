@@ -49,6 +49,10 @@ namespace StateSharp.Core.States
         public void Commit(IStateTransaction<IStateStructure<T>> transaction)
         {
             if (transaction.Owner != this) throw new UnknownTransactionException();
+
+            State = transaction.State.State;
+
+            _eventManager.Invoke(Path);
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)

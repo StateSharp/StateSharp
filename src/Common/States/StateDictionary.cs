@@ -15,13 +15,13 @@ namespace StateSharp.Core.States
         private IStateEventManager _eventManager;
 
         public string Path { get; }
-        public IReadOnlyDictionary<string, T> State => new ReadOnlyDictionary<string, T>(_state);
+        public IReadOnlyDictionary<string, T> State => _state == null ? null : new ReadOnlyDictionary<string, T>(_state);
 
         public StateDictionary(IStateEventManager eventManager, string path)
         {
             Path = path;
             _eventManager = eventManager;
-            _state = default;
+            _state = null;
         }
 
         public StateDictionary(IStateEventManager eventManager, string path, Dictionary<string, T> state)
@@ -29,6 +29,11 @@ namespace StateSharp.Core.States
             Path = path;
             _eventManager = eventManager;
             _state = state;
+        }
+
+        Dictionary<string, T> IStateDictionary<T>.GetState()
+        {
+            return _state;
         }
 
         public IReadOnlyDictionary<string, T> Set()
@@ -63,6 +68,20 @@ namespace StateSharp.Core.States
         public void Commit(IStateTransaction<IStateDictionary<T>> transaction)
         {
             if (transaction.Owner != this) throw new UnknownTransactionException();
+
+            _state = transaction.State.GetState();
+
+            var queue = new Queue<IStateBase>(((IStateBase)this).GetChildren());
+            while (queue.TryDequeue(out var state))
+            {
+                state.SetEventManager(_eventManager);
+                foreach (var child in state.GetChildren())
+                {
+                    queue.Enqueue(child);
+                }
+            }
+
+            _eventManager.Invoke(Path);
         }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)
@@ -87,6 +106,7 @@ namespace StateSharp.Core.States
 
         IStateDictionary<T> IStateDictionary<T>.Copy(IStateEventManager eventManager)
         {
+            if (_state == null) return new StateDictionary<T>(eventManager, Path, null);
             var state = new Dictionary<string, T>();
             foreach (var (key, value) in State)
             {

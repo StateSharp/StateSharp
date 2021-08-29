@@ -7,6 +7,7 @@ namespace StateSharp.Core.States
     public interface IStateDictionary<T> : IStateDictionaryBase where T : IStateBase
     {
         IReadOnlyDictionary<string, T> State { get; }
+        internal Dictionary<string, T> GetState();
 
         IReadOnlyDictionary<string, T> Set();
         T Add(string key);
