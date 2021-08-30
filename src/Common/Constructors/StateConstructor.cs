@@ -35,12 +35,12 @@ namespace StateSharp.Core.Constructors
                     }
                     else
                     {
-                        throw new UnknownStateType();
+                        throw new UnknownStateTypeException($"Unknown state type {type}");
                     }
                 }
                 else
                 {
-                    throw new InvalidStateType();
+                    throw new InvalidStateTypeException($"Type {type} is not a state type");
                 }
             }
             return result;
@@ -70,7 +70,7 @@ namespace StateSharp.Core.Constructors
             }
             else
             {
-                throw new UnknownStateType();
+                throw new UnknownStateTypeException($"Unknown state type {type}");
             }
             return result;
         }

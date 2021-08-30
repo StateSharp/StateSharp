@@ -49,8 +49,9 @@ namespace StateSharp.Core.Transactions
                 {
                     return;
                 }
+                throw new SubscriptionNotFoundException($"Subscription not found for {handler}");
             }
-            throw new SubscriptionNotFoundException();
+            throw new SubscriptionNotFoundException($"Subscription not found for {path}");
         }
     }
 }

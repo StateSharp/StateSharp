@@ -73,7 +73,7 @@ namespace StateSharp.Core.States
 
         public void Commit(IStateTransaction<IStateDictionary<T>> transaction)
         {
-            if (transaction.Owner != this) throw new UnknownTransactionException();
+            if (transaction.Owner != this) throw new UnknownTransactionException("Object is not the owner of transaction");
 
             _state = transaction.State.GetState();
 
@@ -128,7 +128,7 @@ namespace StateSharp.Core.States
 
         IStateBase IStateBase.FromJson(string json)
         {
-            throw new NotImplementedException();
+            return ((IStateDictionary<T>)this).FromJson(json);
         }
 
         string IStateBase.ToJson()

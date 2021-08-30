@@ -35,7 +35,7 @@ namespace StateSharp.Core.Collections
         {
             if (_values.Remove(value) == false)
             {
-                throw new SubscriptionNotFoundException();
+                throw new SubscriptionNotFoundException($"No subscription found for {value}");
             }
         }
     }
