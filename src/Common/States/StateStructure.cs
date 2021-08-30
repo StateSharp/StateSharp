@@ -80,21 +80,6 @@ namespace StateSharp.Core.States
             return new StateStructure<T>(eventManager, Path, State);
         }
 
-        IStateBase IStateStructure<T>.FromJson(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-        IStateBase IStateBase.FromJson(string json)
-        {
-            return ((IStateStructure<T>)this).FromJson(json);
-        }
-
-        string IStateBase.ToJson()
-        {
-            throw new NotImplementedException();
-        }
-
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
             return ((IStateStructure<T>)this).Copy(eventManager);

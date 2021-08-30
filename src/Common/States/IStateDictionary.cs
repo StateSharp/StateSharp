@@ -18,6 +18,5 @@ namespace StateSharp.Core.States
         void Commit(IStateTransaction<IStateDictionary<T>> transaction);
 
         internal new IStateDictionary<T> Copy(IStateEventManager eventManager);
-        internal new IStateBase FromJson(string json);
     }
 }

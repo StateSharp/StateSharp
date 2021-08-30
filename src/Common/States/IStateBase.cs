@@ -14,7 +14,5 @@ namespace StateSharp.Core.States
         internal void SetEventManager(IStateEventManager eventManager);
         internal IReadOnlyList<IStateBase> GetChildren();
         internal IStateBase Copy(IStateEventManager eventManager);
-        internal IStateBase FromJson(string json);
-        internal string ToJson();
     }
 }

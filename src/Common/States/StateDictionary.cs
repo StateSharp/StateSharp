@@ -121,21 +121,6 @@ namespace StateSharp.Core.States
             return new StateDictionary<T>(eventManager, Path, state);
         }
 
-        IStateBase IStateDictionary<T>.FromJson(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-        IStateBase IStateBase.FromJson(string json)
-        {
-            return ((IStateDictionary<T>)this).FromJson(json);
-        }
-
-        string IStateBase.ToJson()
-        {
-            throw new NotImplementedException();
-        }
-
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
             return ((IStateDictionary<T>)this).Copy(eventManager);

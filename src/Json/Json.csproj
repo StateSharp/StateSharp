@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>StateSharp.Json</AssemblyName>
+    <RootNamespace>StateSharp.Json</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Core.csproj" />
+  </ItemGroup>
+
+</Project>
