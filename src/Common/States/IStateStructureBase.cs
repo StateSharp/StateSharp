@@ -2,6 +2,6 @@
 {
     public interface IStateStructureBase : IStateBase
     {
-
+        internal object GetState();
     }
 }

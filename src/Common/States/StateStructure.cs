@@ -75,6 +75,11 @@ namespace StateSharp.Core.States
             return new List<IStateBase>();
         }
 
+        object IStateStructureBase.GetState()
+        {
+            return State;
+        }
+
         IStateStructure<T> IStateStructure<T>.Copy(IStateEventManager eventManager)
         {
             return new StateStructure<T>(eventManager, Path, State);

@@ -87,6 +87,11 @@ namespace StateSharp.Core.States
             return result;
         }
 
+        object IStateObjectBase.GetState()
+        {
+            return State;
+        }
+
         IStateObject<T> IStateObject<T>.Copy(IStateEventManager eventManager)
         {
             return new StateObject<T>(eventManager, Path, CopyService.CopyState(State, eventManager));

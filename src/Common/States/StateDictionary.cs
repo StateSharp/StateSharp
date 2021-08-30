@@ -15,6 +15,7 @@ namespace StateSharp.Core.States
         private IStateEventManager _eventManager;
 
         public string Path { get; }
+
         public IReadOnlyDictionary<string, T> State => _state == null ? null : new ReadOnlyDictionary<string, T>(_state);
 
         public StateDictionary(IStateEventManager eventManager, string path)
@@ -29,11 +30,6 @@ namespace StateSharp.Core.States
             Path = path;
             _eventManager = eventManager;
             _state = state;
-        }
-
-        Dictionary<string, T> IStateDictionary<T>.GetState()
-        {
-            return _state;
         }
 
         public IReadOnlyDictionary<string, T> Set()
@@ -75,7 +71,7 @@ namespace StateSharp.Core.States
         {
             if (transaction.Owner != this) throw new UnknownTransactionException("Object is not the owner of transaction");
 
-            _state = transaction.State.GetState();
+            _state = transaction.State.GetStateRef();
 
             var queue = new Queue<IStateBase>(((IStateBase)this).GetChildren());
             while (queue.TryDequeue(out var state))
@@ -108,6 +104,16 @@ namespace StateSharp.Core.States
         IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
             return State.Values.Cast<IStateBase>().ToList();
+        }
+
+        Dictionary<string, T> IStateDictionary<T>.GetStateRef()
+        {
+            return _state;
+        }
+
+        IReadOnlyDictionary<string, object> IStateDictionaryBase.GetState()
+        {
+            return new ReadOnlyDictionary<string, object>(State.ToDictionary(x => x.Key, x => (object)x.Value));
         }
 
         IStateDictionary<T> IStateDictionary<T>.Copy(IStateEventManager eventManager)
