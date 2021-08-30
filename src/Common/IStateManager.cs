@@ -10,5 +10,7 @@ namespace StateSharp.Core
 
         IStateTransaction<IStateObject<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateObject<T>> transaction);
+
+        void Validate();
     }
 }

@@ -1,12 +1,29 @@
 ﻿using StateSharp.Core.Exceptions;
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace StateSharp.Core.Validators
 {
     internal static class TypeValidator
     {
-        internal static void HasDefaultConstructor(Type type)
+        internal static void IsReferenceType(Type type)
+        {
+            if (type.IsValueType)
+            {
+                throw new ValidationException($"Type {type.FullName} is a value type");
+            }
+        }
+
+        internal static void IsValueType(Type type)
+        {
+            if (type.IsValueType == false)
+            {
+                throw new ValidationException($"Type {type.FullName} is a reference type");
+            }
+        }
+
+        internal static void HasOnlyDefaultConstructor(Type type)
         {
             if (type.GetConstructor(Type.EmptyTypes) == null)
             {
@@ -24,7 +41,7 @@ namespace StateSharp.Core.Validators
 
         internal static void HasNoMethods(Type type)
         {
-            if (type.GetMethods().Any())
+            if (type.GetMethods(BindingFlags.DeclaredOnly).Any())
             {
                 throw new ValidationException($"Type {type.FullName} contains methods");
             }

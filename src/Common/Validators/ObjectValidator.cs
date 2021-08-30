@@ -15,9 +15,10 @@ namespace StateSharp.Core.Validators
         internal static void Validate(Type type)
         {
             var stateType = type.GenericTypeArguments.Single();
-            TypeValidator.HasDefaultConstructor(stateType);
+            TypeValidator.IsReferenceType(stateType);
+            TypeValidator.HasOnlyDefaultConstructor(stateType);
             TypeValidator.HasNoFields(stateType);
-            TypeValidator.HasNoMethods(type);
+            TypeValidator.HasNoMethods(stateType);
             foreach (var property in stateType.GetProperties())
             {
                 var interfaces = property.PropertyType.GetInterfaces();

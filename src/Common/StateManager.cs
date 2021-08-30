@@ -2,6 +2,7 @@
 using StateSharp.Core.Events;
 using StateSharp.Core.States;
 using StateSharp.Core.Transactions;
+using StateSharp.Core.Validators;
 using System;
 
 namespace StateSharp.Core
@@ -42,12 +43,17 @@ namespace StateSharp.Core
 
         public IStateTransaction<IStateObject<T>> BeginTransaction()
         {
-            throw new NotImplementedException();
+            return _state.BeginTransaction();
         }
 
         public void Commit(IStateTransaction<IStateObject<T>> transaction)
         {
-            throw new NotImplementedException();
+            _state.Commit(transaction);
+        }
+
+        public void Validate()
+        {
+            ObjectValidator.Validate<StateObject<T>>();
         }
     }
 }
