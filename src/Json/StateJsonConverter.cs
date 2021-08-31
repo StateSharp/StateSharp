@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Text;
-using StateSharp.Core.Exceptions;
+﻿using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
+using System.Linq;
+using System.Text;
 
 namespace StateSharp.Json
 {
@@ -20,17 +20,17 @@ namespace StateSharp.Json
             {
                 if (interfaces.Contains(typeof(IStateDictionaryBase)))
                 {
-                    return Serialize((IStateDictionaryBase) state);
+                    return Serialize((IStateDictionaryBase)state);
                 }
 
                 if (interfaces.Contains(typeof(IStateObjectBase)))
                 {
-                    return Serialize((IStateObjectBase) state);
+                    return Serialize((IStateObjectBase)state);
                 }
 
                 if (interfaces.Contains(typeof(IStateStructureBase)))
                 {
-                    return Serialize((IStateStructureBase) state);
+                    return Serialize((IStateStructureBase)state);
                 }
 
                 throw new UnknownStateTypeException($"Unknown state type {type}");
@@ -56,15 +56,7 @@ namespace StateSharp.Json
                 return "null";
             }
 
-            var builder = new StringBuilder();
-            builder.Append("{");
-            foreach (var property in state.GetState().GetType().GetProperties())
-            {
-                builder.Append($"\"{property.Name}\": {Serialize(property.GetValue(state.GetState()))}");
-            }
-
-            builder.Append("}");
-            return builder.ToString();
+            return $"{{{string.Join(',', state.GetState().GetType().GetProperties().Select(x => $"\"{x.Name}\": {Serialize(x.GetValue(state.GetState()))}"))}}}";
         }
 
         public static string Serialize(IStateStructureBase state)

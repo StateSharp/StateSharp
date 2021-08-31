@@ -9,11 +9,20 @@ namespace StateSharp.UnitTests.Json
     public class GameStateTest
     {
         [TestMethod]
-        public void GameStateSerialize()
+        public void GameStateNull()
         {
             var manager = StateManagerConstructor.New<GameState>();
             var json = StateJsonConverter.Serialize(manager);
             Assert.AreEqual("null", json);
+        }
+
+        [TestMethod]
+        public void GameStateInitialized()
+        {
+            var manager = StateManagerConstructor.New<GameState>();
+            manager.Init();
+            var json = StateJsonConverter.Serialize(manager);
+            Assert.AreEqual("{\"Score\": 0,\"LocalPlayer\": null,\"RemotePlayers\": null}", json);
         }
     }
 }
