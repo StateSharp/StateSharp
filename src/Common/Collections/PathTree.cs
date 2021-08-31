@@ -38,9 +38,7 @@ namespace StateSharp.Core.Collections
             var node = _root;
             foreach (var key in PathService.SplitPath(path))
             {
-                node = node.Children.TryGetValue(key, out var child)
-                    ? child
-                    : throw new SubscriptionNotFoundException(path);
+                node = node.Children.TryGetValue(key, out var child) ? child : throw new SubscriptionNotFoundException(path);
             }
 
             node.RemoveValue(value);

@@ -3,7 +3,7 @@ using State.State;
 using StateSharp.Core;
 using StateSharp.Json;
 
-namespace StateSharp.UnitTests.Json
+namespace StateSharp.UnitTests.Json.Serialize
 {
     [TestClass]
     public class GameStateTest
@@ -39,9 +39,7 @@ namespace StateSharp.UnitTests.Json
             user1.Init();
             user1.State.Position.Set(new Vector3(2, 3, 4));
             var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual(
-                "{\"Name\":\"Game1\",\"Score\":3,\"LocalPlayer\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}",
-                json);
+            Assert.AreEqual("{\"Name\":\"Game1\",\"Score\":3,\"LocalPlayer\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}", json);
         }
     }
 }

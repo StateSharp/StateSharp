@@ -43,8 +43,7 @@ namespace StateSharp.Core.Validators
                     }
                     else
                     {
-                        throw new ValidationException(
-                            $"Unknown state type for property {property.Name} in type {type.FullName}");
+                        throw new ValidationException($"Unknown state type for property {property.Name} in type {type.FullName}");
                     }
                 }
                 else

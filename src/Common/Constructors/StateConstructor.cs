@@ -23,24 +23,15 @@ namespace StateSharp.Core.Constructors
                 {
                     if (interfaces.Contains(typeof(IStateDictionaryBase)))
                     {
-                        property.SetValue(result,
-                            Activator.CreateInstance(
-                                typeof(StateDictionary<>).MakeGenericType(property.PropertyType.GenericTypeArguments),
-                                eventManager, $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else if (interfaces.Contains(typeof(IStateObjectBase)))
                     {
-                        property.SetValue(result,
-                            Activator.CreateInstance(
-                                typeof(StateObject<>).MakeGenericType(property.PropertyType.GenericTypeArguments),
-                                eventManager, $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else if (interfaces.Contains(typeof(IStateStructureBase)))
                     {
-                        property.SetValue(result,
-                            Activator.CreateInstance(
-                                typeof(StateStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments),
-                                eventManager, $"{path}.{property.Name}"));
+                        property.SetValue(result, Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments), eventManager, $"{path}.{property.Name}"));
                     }
                     else if (interfaces.Contains(typeof(IStateStringBase)))
                     {
@@ -71,18 +62,15 @@ namespace StateSharp.Core.Constructors
             var interfaces = type.GetInterfaces();
             if (interfaces.Contains(typeof(IStateDictionaryBase)))
             {
-                result = Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(type.GenericTypeArguments),
-                    eventManager, path);
+                result = Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(type.GenericTypeArguments), eventManager, path);
             }
             else if (interfaces.Contains(typeof(IStateObjectBase)))
             {
-                result = Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(type.GenericTypeArguments),
-                    eventManager, path);
+                result = Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(type.GenericTypeArguments), eventManager, path);
             }
             else if (interfaces.Contains(typeof(IStateStructureBase)))
             {
-                result = Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(type.GenericTypeArguments),
-                    eventManager, path);
+                result = Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(type.GenericTypeArguments), eventManager, path);
             }
             else
             {

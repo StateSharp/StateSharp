@@ -17,7 +17,7 @@ namespace StateSharp.Core.States
             State = default;
         }
 
-        internal StateStructure(IStateEventManager eventManager, string path, T state)
+        public StateStructure(IStateEventManager eventManager, string path, T state)
         {
             Path = path;
             _eventManager = eventManager;
