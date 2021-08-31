@@ -1,7 +1,6 @@
 ﻿using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
 using System.Linq;
-using System.Text;
 
 namespace StateSharp.Json
 {
@@ -46,7 +45,7 @@ namespace StateSharp.Json
                 return "null";
             }
 
-            return $"{{{string.Join(',', state.GetState().Select(x => $"\"{x.Key}\": {Serialize(x.Value)}"))}}}";
+            return $"{{{string.Join(',', state.GetState().Select(x => $"\"{x.Key}\":{Serialize(x.Value)}"))}}}";
         }
 
         public static string Serialize(IStateObjectBase state)
@@ -56,7 +55,7 @@ namespace StateSharp.Json
                 return "null";
             }
 
-            return $"{{{string.Join(',', state.GetState().GetType().GetProperties().Select(x => $"\"{x.Name}\": {Serialize(x.GetValue(state.GetState()))}"))}}}";
+            return $"{{{string.Join(',', state.GetState().GetType().GetProperties().Select(x => $"\"{x.Name}\":{Serialize(x.GetValue(state.GetState()))}"))}}}";
         }
 
         public static string Serialize(IStateStructureBase state)
@@ -77,15 +76,7 @@ namespace StateSharp.Json
                 return $"\"{state}\"";
             }
 
-            var builder = new StringBuilder();
-            builder.Append("{");
-            foreach (var property in type.GetProperties())
-            {
-                builder.Append($"\"{property.Name}\": {SerializeStructure(property.GetValue(state))}");
-            }
-
-            builder.Append("}");
-            return builder.ToString();
+            return $"{{{string.Join(',', type.GetProperties().Select(x => $"\"{x.Name}\":{SerializeStructure(x.GetValue(state))}"))}}}";
         }
     }
 }
