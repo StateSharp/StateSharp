@@ -113,7 +113,7 @@ namespace StateSharp.Core.States
 
         IReadOnlyDictionary<string, object> IStateDictionaryBase.GetState()
         {
-            return new ReadOnlyDictionary<string, object>(State.ToDictionary(x => x.Key, x => (object)x.Value));
+            return _state == null ? null : new ReadOnlyDictionary<string, object>(State.ToDictionary(x => x.Key, x => (object)x.Value));
         }
 
         IStateDictionary<T> IStateDictionary<T>.Copy(IStateEventManager eventManager)

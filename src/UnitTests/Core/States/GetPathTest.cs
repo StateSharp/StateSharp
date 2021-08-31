@@ -18,6 +18,7 @@ namespace StateSharp.UnitTests.Core.States
         public void StateScore()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             Assert.AreEqual("State.Score", manager.State.Score.Path);
         }
 
@@ -25,6 +26,7 @@ namespace StateSharp.UnitTests.Core.States
         public void StateLocalPlayer()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             Assert.AreEqual("State.LocalPlayer", manager.State.LocalPlayer.Path);
         }
 
@@ -32,6 +34,7 @@ namespace StateSharp.UnitTests.Core.States
         public void StateRemotePlayers()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             Assert.AreEqual("State.RemotePlayers", manager.State.RemotePlayers.Path);
         }
 
@@ -39,6 +42,7 @@ namespace StateSharp.UnitTests.Core.States
         public void StateRemotePlayersUsername()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.RemotePlayers.Set();
             var user1 = manager.State.RemotePlayers.Add("User1");
             Assert.AreEqual("State.RemotePlayers[User1]", user1.Path);
@@ -48,6 +52,7 @@ namespace StateSharp.UnitTests.Core.States
         public void StateRemotePlayersUsernamePosition()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.RemotePlayers.Set();
             var user1 = manager.State.RemotePlayers.Add("User1");
             user1.Set();

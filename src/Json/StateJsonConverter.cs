@@ -9,6 +9,8 @@ namespace StateSharp.Json
     {
         public static string Serialize(object state)
         {
+            if (state == null) return "null";
+
             var type = typeof(object);
             var interfaces = state.GetType().GetInterfaces();
             if (interfaces.Contains(typeof(IStateBase)))
@@ -32,16 +34,20 @@ namespace StateSharp.Json
 
         public static string Serialize(IStateDictionaryBase state)
         {
+            if (state.GetState() == null) return "null";
+
             return $"{{{string.Join(',', state.GetState().Select(x => $"\"{x.Key}\": {Serialize(x.Value)}"))}}}";
         }
 
         public static string Serialize(IStateObjectBase state)
         {
+            if (state.GetState() == null) return "null";
+
             var builder = new StringBuilder();
             builder.Append("{");
             foreach (var property in state.GetState().GetType().GetProperties())
             {
-                builder.Append($"\"{property.Name}\": {Serialize(property.GetValue(state))}");
+                builder.Append($"\"{property.Name}\": {Serialize(property.GetValue(state.GetState()))}");
             }
             builder.Append("}");
             return builder.ToString();
@@ -54,7 +60,18 @@ namespace StateSharp.Json
 
         private static string SerializeStructure(object state)
         {
-            return string.Empty;
+            var type = state.GetType();
+            if (type.IsPrimitive) return state.ToString();
+            if (type == typeof(string)) return $"\"{state}\"";
+
+            var builder = new StringBuilder();
+            builder.Append("{");
+            foreach (var property in type.GetProperties())
+            {
+                builder.Append($"\"{property.Name}\": {SerializeStructure(property.GetValue(state))}");
+            }
+            builder.Append("}");
+            return builder.ToString();
         }
     }
 }

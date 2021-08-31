@@ -15,6 +15,8 @@ namespace StateSharp.UnitTests.Core.Transactions.Object
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
+            manager.State.LocalPlayer.Set();
             manager.State.LocalPlayer.SubscribeOnChange(moq.Object);
             var transaction = manager.State.LocalPlayer.BeginTransaction();
             var state = transaction.State.Set();

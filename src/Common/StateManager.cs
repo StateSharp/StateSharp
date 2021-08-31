@@ -4,6 +4,7 @@ using StateSharp.Core.States;
 using StateSharp.Core.Transactions;
 using StateSharp.Core.Validators;
 using System;
+using System.Collections.Generic;
 
 namespace StateSharp.Core
 {
@@ -19,7 +20,6 @@ namespace StateSharp.Core
         {
             _handlers = new PathTree<Action<IStateEvent>>();
             _state = new StateObject<T>(this, Path);
-            _state.Set();
         }
 
         public void Invoke(string path)
@@ -41,6 +41,11 @@ namespace StateSharp.Core
             _handlers.Remove(path, handler);
         }
 
+        public T Set()
+        {
+            return _state.Set();
+        }
+
         public IStateTransaction<IStateObject<T>> BeginTransaction()
         {
             return _state.BeginTransaction();
@@ -54,6 +59,41 @@ namespace StateSharp.Core
         public void Validate()
         {
             ObjectValidator.Validate<StateObject<T>>();
+        }
+
+        public void SubscribeOnChange(Action<IStateEvent> handler)
+        {
+            Subscribe(Path, handler);
+        }
+
+        public void UnsubscribeOnChange(Action<IStateEvent> handler)
+        {
+            Unsubscribe(Path, handler);
+        }
+
+        void IStateBase.SetEventManager(IStateEventManager eventManager)
+        {
+            ((IStateBase)_state).SetEventManager(eventManager);
+        }
+
+        IReadOnlyList<IStateBase> IStateBase.GetChildren()
+        {
+            return ((IStateBase)_state).GetChildren();
+        }
+
+        IStateObject<T> IStateObject<T>.Copy(IStateEventManager eventManager)
+        {
+            return ((IStateObject<T>)_state).Copy(eventManager);
+        }
+
+        IStateBase IStateBase.Copy(IStateEventManager eventManager)
+        {
+            return ((IStateObject<T>)_state).Copy(eventManager);
+        }
+
+        object IStateObjectBase.GetState()
+        {
+            return ((IStateObjectBase)_state).GetState();
         }
     }
 }

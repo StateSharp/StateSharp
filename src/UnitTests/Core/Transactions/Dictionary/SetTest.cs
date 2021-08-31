@@ -15,6 +15,7 @@ namespace StateSharp.UnitTests.Core.Transactions.Dictionary
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.RemotePlayers.SubscribeOnChange(moq.Object);
             var transaction = manager.State.RemotePlayers.BeginTransaction();
             transaction.State.Set();
@@ -22,7 +23,7 @@ namespace StateSharp.UnitTests.Core.Transactions.Dictionary
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Never);
             manager.State.RemotePlayers.Commit(transaction);
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);
-            Assert.IsNotNull(manager.State.LocalPlayer.State);
+            Assert.IsNotNull(manager.State.RemotePlayers.State);
         }
     }
 }

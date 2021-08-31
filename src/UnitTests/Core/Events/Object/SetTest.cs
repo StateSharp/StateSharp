@@ -15,6 +15,7 @@ namespace StateSharp.UnitTests.Core.Events.Object
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.LocalPlayer.SubscribeOnChange(moq.Object);
             manager.State.LocalPlayer.Set();
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);

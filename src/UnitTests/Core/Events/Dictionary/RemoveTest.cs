@@ -15,6 +15,7 @@ namespace StateSharp.UnitTests.Core.Events.Dictionary
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.RemotePlayers.Set();
             manager.State.RemotePlayers.Add("User1");
             manager.State.RemotePlayers.SubscribeOnChange(moq.Object);

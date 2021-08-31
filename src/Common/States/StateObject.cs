@@ -20,7 +20,7 @@ namespace StateSharp.Core.States
         {
             Path = path;
             _eventManager = eventManager;
-            State = StateConstructor.ConstructState<T>(eventManager, Path);
+            State = null;
         }
 
         public StateObject(IStateEventManager eventManager, string path, T state)
@@ -78,6 +78,7 @@ namespace StateSharp.Core.States
 
         IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
+            if (State == null) return new List<IStateBase>();
             var result = new List<IStateBase>();
             foreach (var property in typeof(T).GetProperties())
             {

@@ -11,6 +11,7 @@ namespace StateSharp.UnitTests.Core.States.Object
         public void SetLocalPlayer()
         {
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.LocalPlayer.Set();
             Assert.IsNotNull(manager.State.LocalPlayer.State);
         }

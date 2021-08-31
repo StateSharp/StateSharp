@@ -15,13 +15,14 @@ namespace StateSharp.UnitTests.Core.Transactions.Structure
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
+            manager.Set();
             manager.State.Score.SubscribeOnChange(moq.Object);
             var transaction = manager.State.Score.BeginTransaction();
             transaction.State.Set(32);
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Never);
             manager.State.Score.Commit(transaction);
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Once);
-            Assert.IsNotNull(manager.State.LocalPlayer.State);
+            Assert.IsNotNull(manager.State.Score.State);
         }
     }
 }
