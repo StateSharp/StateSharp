@@ -6,11 +6,11 @@ namespace StateSharp.Client
     {
         private readonly IStateManager<T> _state;
 
-        public T State => _state.State;
-
         public StateClient()
         {
             _state = StateManagerConstructor.New<T>();
         }
+
+        public T State => _state.State;
     }
 }

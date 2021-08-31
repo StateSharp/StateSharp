@@ -12,7 +12,7 @@ namespace StateSharp.UnitTests.Core.States
         {
             var manager = StateManagerConstructor.New<GameState>();
             Assert.IsNull(manager.State);
-            manager.Set();
+            manager.Init();
             Assert.IsNotNull(manager.State);
             Assert.IsNotNull(manager.State.Score);
             Assert.IsNotNull(manager.State.LocalPlayer);

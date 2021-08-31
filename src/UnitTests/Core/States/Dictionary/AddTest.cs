@@ -11,8 +11,8 @@ namespace StateSharp.UnitTests.Core.States.Dictionary
         public void AddRemotePlayer()
         {
             var manager = StateManagerConstructor.New<GameState>();
-            manager.Set();
-            manager.State.RemotePlayers.Set();
+            manager.Init();
+            manager.State.RemotePlayers.Init();
             var user1 = manager.State.RemotePlayers.Add("User1");
             Assert.AreEqual(user1, manager.State.RemotePlayers.State["User1"]);
         }

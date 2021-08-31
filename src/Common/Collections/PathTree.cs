@@ -1,8 +1,8 @@
-﻿using StateSharp.Core.Events;
+﻿using System;
+using System.Collections.Generic;
+using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Services;
-using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Core.Collections
 {
@@ -29,6 +29,7 @@ namespace StateSharp.Core.Collections
                     node = node.AddChild(key);
                 }
             }
+
             node.AddValue(value);
         }
 
@@ -37,8 +38,11 @@ namespace StateSharp.Core.Collections
             var node = _root;
             foreach (var key in PathService.SplitPath(path))
             {
-                node = node.Children.TryGetValue(key, out var child) ? child : throw new SubscriptionNotFoundException(path);
+                node = node.Children.TryGetValue(key, out var child)
+                    ? child
+                    : throw new SubscriptionNotFoundException(path);
             }
+
             node.RemoveValue(value);
         }
 
@@ -58,6 +62,7 @@ namespace StateSharp.Core.Collections
                     return result;
                 }
             }
+
             result.AddRange(node.Values);
 
             var queue = new Queue<PathTreeNode>(node.Children.Values);
@@ -69,6 +74,7 @@ namespace StateSharp.Core.Collections
                     queue.Enqueue(child);
                 }
             }
+
             return result;
         }
     }

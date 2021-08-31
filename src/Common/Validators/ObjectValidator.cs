@@ -1,7 +1,7 @@
-﻿using StateSharp.Core.Exceptions;
-using StateSharp.Core.States;
-using System;
+﻿using System;
 using System.Linq;
+using StateSharp.Core.Exceptions;
+using StateSharp.Core.States;
 
 namespace StateSharp.Core.Validators
 {
@@ -30,7 +30,7 @@ namespace StateSharp.Core.Validators
                     }
                     else if (interfaces.Contains(typeof(IStateObjectBase)))
                     {
-                        ObjectValidator.Validate(property.PropertyType);
+                        Validate(property.PropertyType);
                     }
                     else if (interfaces.Contains(typeof(IStateStructureBase)))
                     {
@@ -38,7 +38,8 @@ namespace StateSharp.Core.Validators
                     }
                     else
                     {
-                        throw new ValidationException($"Unknown state type for property {property.Name} in type {type.FullName}");
+                        throw new ValidationException(
+                            $"Unknown state type for property {property.Name} in type {type.FullName}");
                     }
                 }
                 else

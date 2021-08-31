@@ -19,6 +19,7 @@ namespace StateSharp.Core.Services
                     result.Add(split);
                 }
             }
+
             return result;
         }
     }

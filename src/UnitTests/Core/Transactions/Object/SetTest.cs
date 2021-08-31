@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
-using System;
 
 namespace StateSharp.UnitTests.Core.Transactions.Object
 {
@@ -15,11 +15,11 @@ namespace StateSharp.UnitTests.Core.Transactions.Object
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
-            manager.Set();
-            manager.State.LocalPlayer.Set();
+            manager.Init();
+            manager.State.LocalPlayer.Init();
             manager.State.LocalPlayer.SubscribeOnChange(moq.Object);
             var transaction = manager.State.LocalPlayer.BeginTransaction();
-            var state = transaction.State.Set();
+            var state = transaction.State.Init();
             state.Position.Set(new Vector3(1, 2, 3));
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Never);
             manager.State.LocalPlayer.Commit(transaction);

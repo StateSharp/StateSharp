@@ -1,6 +1,6 @@
-﻿using StateSharp.Core.Events;
+﻿using System.Collections.Generic;
+using StateSharp.Core.Events;
 using StateSharp.Core.Transactions;
-using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
@@ -8,7 +8,7 @@ namespace StateSharp.Core.States
     {
         IReadOnlyDictionary<string, T> State { get; }
 
-        IReadOnlyDictionary<string, T> Set();
+        IReadOnlyDictionary<string, T> Init();
         T Add(string key);
         void Remove(string key);
         void Clear();

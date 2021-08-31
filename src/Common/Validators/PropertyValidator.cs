@@ -1,5 +1,5 @@
-﻿using StateSharp.Core.Exceptions;
-using System.Reflection;
+﻿using System.Reflection;
+using StateSharp.Core.Exceptions;
 
 namespace StateSharp.Core.Validators
 {

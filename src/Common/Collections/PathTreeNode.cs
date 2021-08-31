@@ -1,23 +1,23 @@
-﻿using StateSharp.Core.Events;
-using StateSharp.Core.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
 
 namespace StateSharp.Core.Collections
 {
     internal class PathTreeNode
     {
-        private readonly List<Action<IStateEvent>> _values;
         private readonly Dictionary<string, PathTreeNode> _children;
-
-        public IReadOnlyList<Action<IStateEvent>> Values => _values.AsReadOnly();
-        public IReadOnlyDictionary<string, PathTreeNode> Children => _children;
+        private readonly List<Action<IStateEvent>> _values;
 
         internal PathTreeNode()
         {
             _values = new List<Action<IStateEvent>>();
             _children = new Dictionary<string, PathTreeNode>();
         }
+
+        public IReadOnlyList<Action<IStateEvent>> Values => _values.AsReadOnly();
+        public IReadOnlyDictionary<string, PathTreeNode> Children => _children;
 
         public PathTreeNode AddChild(string key)
         {

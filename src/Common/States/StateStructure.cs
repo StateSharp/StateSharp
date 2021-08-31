@@ -1,18 +1,14 @@
-﻿using StateSharp.Core.Events;
+﻿using System;
+using System.Collections.Generic;
+using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
-using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
     internal class StateStructure<T> : IStateStructure<T> where T : struct
     {
         private IStateEventManager _eventManager;
-
-        public string Path { get; }
-
-        public T State { get; private set; }
 
         public StateStructure(IStateEventManager eventManager, string path)
         {
@@ -28,12 +24,9 @@ namespace StateSharp.Core.States
             State = state;
         }
 
-        public T Set()
-        {
-            State = default;
-            _eventManager.Invoke(Path);
-            return State;
-        }
+        public string Path { get; }
+
+        public T State { get; private set; }
 
         public void Set(T state)
         {
@@ -43,12 +36,15 @@ namespace StateSharp.Core.States
 
         public IStateTransaction<IStateStructure<T>> BeginTransaction()
         {
-            return new StateTransaction<IStateStructure<T>>(this, em => ((IStateStructure<T>)this).Copy(em));
+            return new StateTransaction<IStateStructure<T>>(this, em => ((IStateStructure<T>) this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateStructure<T>> transaction)
         {
-            if (transaction.Owner != this) throw new UnknownTransactionException("Object is not the owner of transaction");
+            if (transaction.Owner != this)
+            {
+                throw new UnknownTransactionException("Object is not the owner of transaction");
+            }
 
             State = transaction.State.State;
 
@@ -87,7 +83,14 @@ namespace StateSharp.Core.States
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateStructure<T>)this).Copy(eventManager);
+            return ((IStateStructure<T>) this).Copy(eventManager);
+        }
+
+        public T Set()
+        {
+            State = default;
+            _eventManager.Invoke(Path);
+            return State;
         }
     }
 }

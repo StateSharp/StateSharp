@@ -7,7 +7,7 @@ namespace StateSharp.Core.States
     {
         T State { get; }
 
-        T Set();
+        T Init();
 
         IStateTransaction<IStateObject<T>> BeginTransaction();
         void Commit(IStateTransaction<IStateObject<T>> transaction);

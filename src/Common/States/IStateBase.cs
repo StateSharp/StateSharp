@@ -1,6 +1,6 @@
-﻿using StateSharp.Core.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using StateSharp.Core.Events;
 
 namespace StateSharp.Core.States
 {

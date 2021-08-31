@@ -1,20 +1,16 @@
-﻿using StateSharp.Core.Constructors;
+﻿using System;
+using System.Collections.Generic;
+using StateSharp.Core.Constructors;
 using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Services;
 using StateSharp.Core.Transactions;
-using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Core.States
 {
     internal sealed class StateObject<T> : IStateObject<T> where T : class
     {
         private IStateEventManager _eventManager;
-
-        public string Path { get; }
-
-        public T State { get; private set; }
 
         public StateObject(IStateEventManager eventManager, string path)
         {
@@ -30,7 +26,11 @@ namespace StateSharp.Core.States
             State = state;
         }
 
-        public T Set()
+        public string Path { get; }
+
+        public T State { get; private set; }
+
+        public T Init()
         {
             State = StateConstructor.ConstructState<T>(_eventManager, Path);
             _eventManager.Invoke(Path);
@@ -39,16 +39,19 @@ namespace StateSharp.Core.States
 
         public IStateTransaction<IStateObject<T>> BeginTransaction()
         {
-            return new StateTransaction<IStateObject<T>>(this, em => ((IStateObject<T>)this).Copy(em));
+            return new StateTransaction<IStateObject<T>>(this, em => ((IStateObject<T>) this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateObject<T>> transaction)
         {
-            if (transaction.Owner != this) throw new UnknownTransactionException("Object is not the owner of transaction");
+            if (transaction.Owner != this)
+            {
+                throw new UnknownTransactionException("Object is not the owner of transaction");
+            }
 
             State = transaction.State.State;
 
-            var queue = new Queue<IStateBase>(((IStateBase)this).GetChildren());
+            var queue = new Queue<IStateBase>(((IStateBase) this).GetChildren());
             while (queue.TryDequeue(out var state))
             {
                 state.SetEventManager(_eventManager);
@@ -78,13 +81,18 @@ namespace StateSharp.Core.States
 
         IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
-            if (State == null) return new List<IStateBase>();
+            if (State == null)
+            {
+                return new List<IStateBase>();
+            }
+
             var result = new List<IStateBase>();
             foreach (var property in typeof(T).GetProperties())
             {
-                var value = (IStateBase)property.GetValue(State) ?? throw new NullReferenceException();
+                var value = (IStateBase) property.GetValue(State) ?? throw new NullReferenceException();
                 result.Add(value);
             }
+
             return result;
         }
 
@@ -100,7 +108,7 @@ namespace StateSharp.Core.States
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateObject<T>)this).Copy(eventManager);
+            return ((IStateObject<T>) this).Copy(eventManager);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
-using System;
 
 namespace StateSharp.UnitTests.Core.Transactions.Dictionary
 {
@@ -15,10 +15,10 @@ namespace StateSharp.UnitTests.Core.Transactions.Dictionary
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
-            manager.Set();
+            manager.Init();
             manager.State.RemotePlayers.SubscribeOnChange(moq.Object);
             var transaction = manager.State.RemotePlayers.BeginTransaction();
-            transaction.State.Set();
+            transaction.State.Init();
             transaction.State.Add("User1");
             moq.Verify(x => x(It.IsAny<IStateEvent>()), Times.Never);
             manager.State.RemotePlayers.Commit(transaction);

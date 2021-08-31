@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
-using System;
 
 namespace StateSharp.UnitTests.Core.Transactions.Structure
 {
@@ -15,7 +15,7 @@ namespace StateSharp.UnitTests.Core.Transactions.Structure
         {
             var moq = new Mock<Action<IStateEvent>>();
             var manager = StateManagerConstructor.New<GameState>();
-            manager.Set();
+            manager.Init();
             manager.State.Score.SubscribeOnChange(moq.Object);
             var transaction = manager.State.Score.BeginTransaction();
             transaction.State.Set(32);

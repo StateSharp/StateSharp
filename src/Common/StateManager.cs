@@ -1,10 +1,10 @@
-﻿using StateSharp.Core.Collections;
+﻿using System;
+using System.Collections.Generic;
+using StateSharp.Core.Collections;
 using StateSharp.Core.Events;
 using StateSharp.Core.States;
 using StateSharp.Core.Transactions;
 using StateSharp.Core.Validators;
-using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Core
 {
@@ -12,9 +12,6 @@ namespace StateSharp.Core
     {
         private readonly PathTree<Action<IStateEvent>> _handlers;
         private readonly StateObject<T> _state;
-
-        public string Path => "State";
-        public T State => _state.State;
 
         public StateManager()
         {
@@ -41,9 +38,12 @@ namespace StateSharp.Core
             _handlers.Remove(path, handler);
         }
 
-        public T Set()
+        public string Path => "State";
+        public T State => _state.State;
+
+        public T Init()
         {
-            return _state.Set();
+            return _state.Init();
         }
 
         public IStateTransaction<IStateObject<T>> BeginTransaction()
@@ -73,27 +73,27 @@ namespace StateSharp.Core
 
         void IStateBase.SetEventManager(IStateEventManager eventManager)
         {
-            ((IStateBase)_state).SetEventManager(eventManager);
+            ((IStateBase) _state).SetEventManager(eventManager);
         }
 
         IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
-            return ((IStateBase)_state).GetChildren();
+            return ((IStateBase) _state).GetChildren();
         }
 
         IStateObject<T> IStateObject<T>.Copy(IStateEventManager eventManager)
         {
-            return ((IStateObject<T>)_state).Copy(eventManager);
+            return ((IStateObject<T>) _state).Copy(eventManager);
         }
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateObject<T>)_state).Copy(eventManager);
+            return ((IStateObject<T>) _state).Copy(eventManager);
         }
 
         object IStateObjectBase.GetState()
         {
-            return ((IStateObjectBase)_state).GetState();
+            return ((IStateObjectBase) _state).GetState();
         }
     }
 }

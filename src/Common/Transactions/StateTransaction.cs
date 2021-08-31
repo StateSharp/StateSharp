@@ -1,18 +1,15 @@
-﻿using StateSharp.Core.Events;
+﻿using System;
+using System.Collections.Generic;
+using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
-using System;
-using System.Collections.Generic;
 
 namespace StateSharp.Core.Transactions
 {
     internal class StateTransaction<T> : IStateTransaction<T>, IStateEventManager where T : IStateBase
     {
-        private readonly IStateBase _owner;
         private readonly IDictionary<string, List<Action<IStateEvent>>> _handlers;
-
-        public T State { get; }
-        IStateBase IStateTransaction<T>.Owner => _owner;
+        private readonly IStateBase _owner;
 
         public StateTransaction(IStateBase owner, Func<IStateEventManager, T> constructor)
         {
@@ -36,7 +33,7 @@ namespace StateSharp.Core.Transactions
             {
                 _handlers.Add(path, new List<Action<IStateEvent>>
                 {
-                    handler,
+                    handler
                 });
             }
         }
@@ -49,9 +46,14 @@ namespace StateSharp.Core.Transactions
                 {
                     return;
                 }
+
                 throw new SubscriptionNotFoundException($"Subscription not found for {handler}");
             }
+
             throw new SubscriptionNotFoundException($"Subscription not found for {path}");
         }
+
+        public T State { get; }
+        IStateBase IStateTransaction<T>.Owner => _owner;
     }
 }

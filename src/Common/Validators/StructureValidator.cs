@@ -1,7 +1,7 @@
-﻿using StateSharp.Core.States;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
+using StateSharp.Core.States;
 
 namespace StateSharp.Core.Validators
 {
@@ -19,7 +19,10 @@ namespace StateSharp.Core.Validators
 
         private static void ValidateStruct(Type type)
         {
-            if (type.IsPrimitive) return;
+            if (type.IsPrimitive)
+            {
+                return;
+            }
 
             TypeValidator.IsValueType(type);
             TypeValidator.HasNoFields(type);
