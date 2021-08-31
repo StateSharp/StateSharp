@@ -42,6 +42,10 @@ namespace StateSharp.Core.Constructors
                                 typeof(StateStructure<>).MakeGenericType(property.PropertyType.GenericTypeArguments),
                                 eventManager, $"{path}.{property.Name}"));
                     }
+                    else if (interfaces.Contains(typeof(IStateStringBase)))
+                    {
+                        property.SetValue(result, new StateString(eventManager, $"{path}.{property.Name}"));
+                    }
                     else
                     {
                         throw new UnknownStateTypeException($"Unknown state type {type}");

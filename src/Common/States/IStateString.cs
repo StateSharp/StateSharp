@@ -9,6 +9,8 @@ namespace StateSharp.Core.States
 
         string Init();
 
+        void Set(string state);
+
         IStateTransaction<IStateString> BeginTransaction();
         void Commit(IStateTransaction<IStateString> transaction);
 

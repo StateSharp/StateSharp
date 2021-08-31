@@ -1,6 +1,6 @@
-﻿using StateSharp.Core.Exceptions;
+﻿using System.Linq;
+using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
-using System.Linq;
 
 namespace StateSharp.Json
 {
@@ -19,17 +19,22 @@ namespace StateSharp.Json
             {
                 if (interfaces.Contains(typeof(IStateDictionaryBase)))
                 {
-                    return Serialize((IStateDictionaryBase)state);
+                    return Serialize((IStateDictionaryBase) state);
                 }
 
                 if (interfaces.Contains(typeof(IStateObjectBase)))
                 {
-                    return Serialize((IStateObjectBase)state);
+                    return Serialize((IStateObjectBase) state);
                 }
 
                 if (interfaces.Contains(typeof(IStateStructureBase)))
                 {
-                    return Serialize((IStateStructureBase)state);
+                    return Serialize((IStateStructureBase) state);
+                }
+
+                if (interfaces.Contains(typeof(IStateStringBase)))
+                {
+                    return Serialize((IStateStringBase) state);
                 }
 
                 throw new UnknownStateTypeException($"Unknown state type {type}");
@@ -55,12 +60,18 @@ namespace StateSharp.Json
                 return "null";
             }
 
-            return $"{{{string.Join(',', state.GetState().GetType().GetProperties().Select(x => $"\"{x.Name}\":{Serialize(x.GetValue(state.GetState()))}"))}}}";
+            return
+                $"{{{string.Join(',', state.GetState().GetType().GetProperties().Select(x => $"\"{x.Name}\":{Serialize(x.GetValue(state.GetState()))}"))}}}";
         }
 
         public static string Serialize(IStateStructureBase state)
         {
             return SerializeStructure(state.GetState());
+        }
+
+        public static string Serialize(IStateStringBase state)
+        {
+            return SerializeString((string) state.GetState());
         }
 
         private static string SerializeStructure(object state)
@@ -73,10 +84,16 @@ namespace StateSharp.Json
 
             if (type == typeof(string))
             {
-                return $"\"{state}\"";
+                return SerializeString((string) state);
             }
 
-            return $"{{{string.Join(',', type.GetProperties().Select(x => $"\"{x.Name}\":{SerializeStructure(x.GetValue(state))}"))}}}";
+            return
+                $"{{{string.Join(',', type.GetProperties().Select(x => $"\"{x.Name}\":{SerializeStructure(x.GetValue(state))}"))}}}";
+        }
+
+        private static string SerializeString(string state)
+        {
+            return state == null ? "null" : $"\"{state}\"";
         }
     }
 }

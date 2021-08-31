@@ -22,7 +22,7 @@ namespace StateSharp.UnitTests.Json
             var manager = StateManagerConstructor.New<GameState>();
             manager.Init();
             var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual("{\"Score\":0,\"LocalPlayer\":null,\"RemotePlayers\":null}", json);
+            Assert.AreEqual("{\"Name\":null,\"Score\":0,\"LocalPlayer\":null,\"RemotePlayers\":null}", json);
         }
 
         [TestMethod]
@@ -30,6 +30,7 @@ namespace StateSharp.UnitTests.Json
         {
             var manager = StateManagerConstructor.New<GameState>();
             manager.Init();
+            manager.State.Name.Set("Game1");
             manager.State.Score.Set(3);
             manager.State.LocalPlayer.Init();
             manager.State.LocalPlayer.State.Position.Set(new Vector3(1, 2, 3));
@@ -38,7 +39,9 @@ namespace StateSharp.UnitTests.Json
             user1.Init();
             user1.State.Position.Set(new Vector3(2, 3, 4));
             var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual("{\"Score\":3,\"LocalPlayer\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}", json);
+            Assert.AreEqual(
+                "{\"Name\":\"Game1\",\"Score\":3,\"LocalPlayer\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}",
+                json);
         }
     }
 }

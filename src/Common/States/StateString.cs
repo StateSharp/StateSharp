@@ -1,64 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
 using StateSharp.Core.Events;
+using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
 
 namespace StateSharp.Core.States
 {
     internal class StateString : IStateString
     {
+        private IStateEventManager _eventManager;
+
+        public StateString(IStateEventManager eventManager, string path)
+        {
+            Path = path;
+            _eventManager = eventManager;
+            State = null;
+        }
+
+        public StateString(IStateEventManager eventManager, string path, string state)
+        {
+            Path = path;
+            _eventManager = eventManager;
+            State = state;
+        }
+
         public string Path { get; }
 
         public void SubscribeOnChange(Action<IStateEvent> handler)
         {
-            throw new NotImplementedException();
+            _eventManager.Unsubscribe(Path, handler);
         }
 
         public void UnsubscribeOnChange(Action<IStateEvent> handler)
         {
-            throw new NotImplementedException();
+            _eventManager.Subscribe(Path, handler);
         }
 
         void IStateBase.SetEventManager(IStateEventManager eventManager)
         {
-            throw new NotImplementedException();
+            _eventManager = eventManager;
         }
 
         IReadOnlyList<IStateBase> IStateBase.GetChildren()
         {
-            throw new NotImplementedException();
+            return new List<IStateBase>();
         }
 
         IStateString IStateString.Copy(IStateEventManager eventManager)
         {
-            throw new NotImplementedException();
+            return new StateString(eventManager, Path, State);
         }
 
-        public string State { get; }
+        public string State { get; private set; }
 
         public string Init()
         {
-            throw new NotImplementedException();
+            State = string.Empty;
+            return State;
+        }
+
+        public void Set(string state)
+        {
+            State = state;
+            _eventManager.Invoke(Path);
         }
 
         public IStateTransaction<IStateString> BeginTransaction()
         {
-            throw new NotImplementedException();
+            return new StateTransaction<IStateString>(this, em => ((IStateString) this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateString> transaction)
         {
-            throw new NotImplementedException();
+            if (transaction.Owner != this)
+            {
+                throw new UnknownTransactionException("Object is not the owner of transaction");
+            }
+
+            State = transaction.State.State;
+
+            _eventManager.Invoke(Path);
         }
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            throw new NotImplementedException();
+            return ((IStateString) this).Copy(eventManager);
         }
 
         object IStateStringBase.GetState()
         {
-            throw new NotImplementedException();
+            return State;
         }
     }
 }

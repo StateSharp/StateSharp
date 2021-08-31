@@ -24,6 +24,11 @@ namespace StateSharp.Core.Validators
                 var interfaces = property.PropertyType.GetInterfaces();
                 if (interfaces.Contains(typeof(IStateBase)))
                 {
+                    if (interfaces.Contains(typeof(IStateStringBase)))
+                    {
+                        continue;
+                    }
+
                     if (interfaces.Contains(typeof(IStateDictionaryBase)))
                     {
                         DictionaryValidator.Validate(property.PropertyType);
