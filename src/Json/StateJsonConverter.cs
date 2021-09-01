@@ -135,14 +135,14 @@ namespace StateSharp.Json
             var stateType = type.GenericTypeArguments.Single();
             var state = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(typeof(string), stateType));
 
-            if (tokens.Dequeue() == '{')
+            if (tokens.Dequeue() != '{')
             {
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
 
             while (true)
             {
-                var field = ReadField(type, tokens);
+                var field = ReadString(type, tokens);
                 if (tokens.Dequeue() != ':')
                 {
                     throw new DeserializationException($"Could not serialize json for {type.FullName}");
@@ -153,11 +153,13 @@ namespace StateSharp.Json
 
                 if (tokens.Peek() == ',')
                 {
+                    tokens.Dequeue();
                     continue;
                 }
 
                 if (tokens.Peek() == '}')
                 {
+                    tokens.Dequeue();
                     break;
                 }
 
@@ -177,9 +179,13 @@ namespace StateSharp.Json
         private static IStateStructureBase DeserializeStructure(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
-            var state = Activator.CreateInstance(stateType);
-            var constructors = typeof(StateStructure<>).MakeGenericType(stateType).GetConstructors();
-            return (IStateStructureBase) Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, state);
+
+            if (stateType.IsPrimitive)
+            {
+                return (IStateStructureBase) Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializePrimative(stateType, tokens));
+            }
+
+            return (IStateStructureBase) Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializeStruct(stateType, tokens));
         }
 
         private static IStateStringBase DeserializeString(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
@@ -187,10 +193,141 @@ namespace StateSharp.Json
             return null;
         }
 
-        private static string ReadField(Type type, Queue<char> tokens)
+        private static object DeserializeStruct(Type type, Queue<char> tokens)
+        {
+            var state = Activator.CreateInstance(type);
+
+            if (tokens.Dequeue() != '{')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            while (true)
+            {
+                var field = ReadString(type, tokens);
+                if (tokens.Dequeue() != ':')
+                {
+                    throw new DeserializationException($"Could not serialize json for {type.FullName}");
+                }
+
+                var property = type.GetProperty(field);
+                if (property.PropertyType.IsPrimitive)
+                {
+                    property.SetValue(state, DeserializePrimative(property.PropertyType, tokens));
+                }
+                else
+                {
+                    property.SetValue(state, DeserializeStruct(property.PropertyType, tokens));
+                }
+
+                if (tokens.Peek() == ',')
+                {
+                    tokens.Dequeue();
+                    continue;
+                }
+
+                if (tokens.Peek() == '}')
+                {
+                    tokens.Dequeue();
+                    break;
+                }
+
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            return state;
+        }
+
+        private static object DeserializePrimative(Type type, Queue<char> tokens)
         {
             var builder = new StringBuilder();
-            if (tokens.Dequeue() == '"')
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
+            {
+                builder.Append(tokens.Dequeue());
+            }
+
+            if (type == typeof(bool))
+            {
+                return bool.Parse(builder.ToString());
+            }
+
+            if (type == typeof(byte))
+            {
+                return byte.Parse(builder.ToString());
+            }
+
+            if (type == typeof(sbyte))
+            {
+                return sbyte.Parse(builder.ToString());
+            }
+
+            if (type == typeof(char))
+            {
+                return char.Parse(builder.ToString());
+            }
+
+            if (type == typeof(decimal))
+            {
+                return decimal.Parse(builder.ToString());
+            }
+
+            if (type == typeof(double))
+            {
+                return double.Parse(builder.ToString());
+            }
+
+            if (type == typeof(float))
+            {
+                return float.Parse(builder.ToString());
+            }
+
+            if (type == typeof(int))
+            {
+                return int.Parse(builder.ToString());
+            }
+
+            if (type == typeof(uint))
+            {
+                return uint.Parse(builder.ToString());
+            }
+
+            if (type == typeof(nint))
+            {
+                return nint.Parse(builder.ToString());
+            }
+
+            if (type == typeof(nuint))
+            {
+                return nuint.Parse(builder.ToString());
+            }
+
+            if (type == typeof(long))
+            {
+                return long.Parse(builder.ToString());
+            }
+
+            if (type == typeof(ulong))
+            {
+                return ulong.Parse(builder.ToString());
+            }
+
+            if (type == typeof(short))
+            {
+                return short.Parse(builder.ToString());
+            }
+
+            if (type == typeof(ushort))
+            {
+                return ushort.Parse(builder.ToString());
+            }
+
+            throw new DeserializationException($"Unknown primative {type.FullName}");
+        }
+
+        private static string ReadString(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            if (tokens.Dequeue() != '"')
             {
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
