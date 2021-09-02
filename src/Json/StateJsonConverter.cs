@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using StateSharp.Core.Events;
+﻿using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
 using StateSharp.Json.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace StateSharp.Json
 {
@@ -24,22 +24,22 @@ namespace StateSharp.Json
             {
                 if (interfaces.Contains(typeof(IStateDictionaryBase)))
                 {
-                    return Serialize((IStateDictionaryBase) state);
+                    return Serialize((IStateDictionaryBase)state);
                 }
 
                 if (interfaces.Contains(typeof(IStateObjectBase)))
                 {
-                    return Serialize((IStateObjectBase) state);
+                    return Serialize((IStateObjectBase)state);
                 }
 
                 if (interfaces.Contains(typeof(IStateStructureBase)))
                 {
-                    return Serialize((IStateStructureBase) state);
+                    return Serialize((IStateStructureBase)state);
                 }
 
                 if (interfaces.Contains(typeof(IStateStringBase)))
                 {
-                    return Serialize((IStateStringBase) state);
+                    return Serialize((IStateStringBase)state);
                 }
 
                 throw new UnknownStateTypeException($"Unknown state type {type}");
@@ -75,7 +75,7 @@ namespace StateSharp.Json
 
         public static string Serialize(IStateStringBase state)
         {
-            return SerializeString((string) state.GetState());
+            return SerializeString((string)state.GetState());
         }
 
         private static string SerializeStructure(object state)
@@ -88,7 +88,7 @@ namespace StateSharp.Json
 
             if (type == typeof(string))
             {
-                return SerializeString((string) state);
+                return SerializeString((string)state);
             }
 
             return $"{{{string.Join(',', type.GetProperties().Select(x => $"\"{x.Name}\":{SerializeStructure(x.GetValue(state))}"))}}}";
@@ -101,7 +101,7 @@ namespace StateSharp.Json
 
         internal static T Deserialize<T>(IStateEventManager eventManager, string path, string json) where T : IStateBase
         {
-            return (T) Deserialize(typeof(T), eventManager, path, new Queue<char>(json));
+            return (T)Deserialize(typeof(T), eventManager, path, new Queue<char>(json));
         }
 
         internal static object Deserialize(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
@@ -149,7 +149,7 @@ namespace StateSharp.Json
                 }
 
                 var value = Deserialize(type.GenericTypeArguments.Single(), eventManager, $"{path}[{field}]", tokens);
-                state.GetType().GetMethod("Add").Invoke(state, new[] {field, value});
+                state.GetType().GetMethod("Add").Invoke(state, new[] { field, value });
 
                 if (tokens.Peek() == ',')
                 {
@@ -166,14 +166,47 @@ namespace StateSharp.Json
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
 
-            return (IStateDictionaryBase) Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
+            return (IStateDictionaryBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
         }
 
         private static IStateObjectBase DeserializeObject(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
             var state = Activator.CreateInstance(stateType);
-            return (IStateObjectBase) Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
+
+            if (tokens.Dequeue() != '{')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            while (true)
+            {
+                var field = ReadString(type, tokens);
+                if (tokens.Dequeue() != ':')
+                {
+                    throw new DeserializationException($"Could not serialize json for {type.FullName}");
+                }
+
+                var property = stateType.GetProperty(field);
+                var value = Deserialize(property.PropertyType, eventManager, $"{path}.{field}", tokens);
+                property.SetValue(state, value);
+
+                if (tokens.Peek() == ',')
+                {
+                    tokens.Dequeue();
+                    continue;
+                }
+
+                if (tokens.Peek() == '}')
+                {
+                    tokens.Dequeue();
+                    break;
+                }
+
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            return (IStateObjectBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
         }
 
         private static IStateStructureBase DeserializeStructure(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
@@ -182,15 +215,16 @@ namespace StateSharp.Json
 
             if (stateType.IsPrimitive)
             {
-                return (IStateStructureBase) Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializePrimative(stateType, tokens));
+                return (IStateStructureBase)Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializePrimative(stateType, tokens));
             }
 
-            return (IStateStructureBase) Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializeStruct(stateType, tokens));
+            return (IStateStructureBase)Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializeStruct(stateType, tokens));
         }
 
         private static IStateStringBase DeserializeString(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
-            return null;
+            var value = ReadString(typeof(string), tokens);
+            return new StateString(eventManager, path, value);
         }
 
         private static object DeserializeStruct(Type type, Queue<char> tokens)

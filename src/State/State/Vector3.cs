@@ -2,9 +2,9 @@
 {
     public struct Vector3
     {
-        public float X { get; }
-        public float Y { get; }
-        public float Z { get; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
+        public float Z { get; private set; }
 
         public Vector3(float x, float y, float z)
         {

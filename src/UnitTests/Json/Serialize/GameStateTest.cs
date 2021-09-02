@@ -9,37 +9,22 @@ namespace StateSharp.UnitTests.Json.Serialize
     public class GameStateTest
     {
         [TestMethod]
-        public void GameStateNull()
-        {
-            var manager = StateManagerConstructor.New<GameState>();
-            var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual("null", json);
-        }
-
-        [TestMethod]
-        public void GameStateInitialized()
+        public void GameStateInitializedTest()
         {
             var manager = StateManagerConstructor.New<GameState>();
             manager.Init();
-            var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual("{\"Name\":null,\"Score\":0,\"LocalPlayer\":null,\"RemotePlayers\":null}", json);
-        }
-
-        [TestMethod]
-        public void GameStateFullyInitialized()
-        {
-            var manager = StateManagerConstructor.New<GameState>();
-            manager.Init();
-            manager.State.Name.Set("Game1");
-            manager.State.Score.Set(3);
-            manager.State.LocalPlayer.Init();
-            manager.State.LocalPlayer.State.Position.Set(new Vector3(1, 2, 3));
+            manager.State.Name.Set("Lobby");
+            manager.State.Score.Set(10);
+            var localPlayer = manager.State.LocalPlayer.Init();
+            localPlayer.Position.Set(new Vector3(0, 1, 2));
             manager.State.RemotePlayers.Init();
             var user1 = manager.State.RemotePlayers.Add("User1");
             user1.Init();
-            user1.State.Position.Set(new Vector3(2, 3, 4));
-            var json = StateJsonConverter.Serialize(manager);
-            Assert.AreEqual("{\"Name\":\"Game1\",\"Score\":3,\"LocalPlayer\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}", json);
+            user1.State.Position.Set(new Vector3(1, 2, 3));
+            var user2 = manager.State.RemotePlayers.Add("User2");
+            user2.Init();
+            user2.State.Position.Set(new Vector3(2, 3, 4));
+            Assert.AreEqual("{\"Name\":\"Lobby\",\"Score\":10,\"LocalPlayer\":{\"Position\":{\"X\":0,\"Y\":1,\"Z\":2}},\"RemotePlayers\":{\"User1\":{\"Position\":{\"X\":1,\"Y\":2,\"Z\":3}},\"User2\":{\"Position\":{\"X\":2,\"Y\":3,\"Z\":4}}}}", StateJsonConverter.Serialize(manager));
         }
     }
 }
