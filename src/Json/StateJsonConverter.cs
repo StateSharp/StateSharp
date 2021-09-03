@@ -133,6 +133,9 @@ namespace StateSharp.Json
         private static IStateDictionaryBase DeserializeDictionary(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
+
+            if (tokens.Peek() == 'n') return (IStateDictionaryBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path);
+
             var state = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(typeof(string), stateType));
 
             if (tokens.Dequeue() != '{')
@@ -172,6 +175,9 @@ namespace StateSharp.Json
         private static IStateObjectBase DeserializeObject(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
+
+            if (tokens.Peek() == 'n') return (IStateObjectBase)Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(stateType), eventManager, path);
+
             var state = Activator.CreateInstance(stateType);
 
             if (tokens.Dequeue() != '{')
@@ -206,7 +212,7 @@ namespace StateSharp.Json
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
 
-            return (IStateObjectBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
+            return (IStateObjectBase)Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(stateType), eventManager, path, state);
         }
 
         private static IStateStructureBase DeserializeStructure(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
@@ -223,6 +229,7 @@ namespace StateSharp.Json
 
         private static IStateStringBase DeserializeString(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
+            if (tokens.Peek() == 'n') return new StateString(eventManager, path);
             var value = ReadString(typeof(string), tokens);
             return new StateString(eventManager, path, value);
         }
@@ -374,6 +381,14 @@ namespace StateSharp.Json
             }
 
             return builder.ToString();
+        }
+
+        private static void ReadNull(Type type, Queue<char> tokens)
+        {
+            if (tokens.Dequeue() != 'n') throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            if (tokens.Dequeue() != 'u') throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            if (tokens.Dequeue() != 'l') throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            if (tokens.Dequeue() != 'l') throw new DeserializationException($"Could not serialize json for {type.FullName}");
         }
     }
 }
