@@ -80,8 +80,28 @@ namespace StateSharp.Json
 
         private static string SerializeStructure(object state)
         {
+            if (state == null)
+            {
+                return "null";
+            }
+
             var type = state.GetType();
             if (type.IsPrimitive)
+            {
+                if (type == typeof(bool))
+                {
+                    return state.ToString().ToLower();
+                }
+
+                if (type == typeof(char))
+                {
+                    return $"'{state}'";
+                }
+
+                return state.ToString();
+            }
+
+            if (type == typeof(decimal))
             {
                 return state.ToString();
             }
@@ -134,7 +154,11 @@ namespace StateSharp.Json
         {
             var stateType = type.GenericTypeArguments.Single();
 
-            if (tokens.Peek() == 'n') return (IStateDictionaryBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path);
+            if (tokens.Peek() == 'n')
+            {
+                ReadNull(type, tokens);
+                return (IStateDictionaryBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path);
+            }
 
             var state = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(typeof(string), stateType));
 
@@ -176,7 +200,11 @@ namespace StateSharp.Json
         {
             var stateType = type.GenericTypeArguments.Single();
 
-            if (tokens.Peek() == 'n') return (IStateObjectBase)Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(stateType), eventManager, path);
+            if (tokens.Peek() == 'n')
+            {
+                ReadNull(type, tokens);
+                return (IStateObjectBase)Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(stateType), eventManager, path);
+            }
 
             var state = Activator.CreateInstance(stateType);
 
@@ -229,13 +257,33 @@ namespace StateSharp.Json
 
         private static IStateStringBase DeserializeString(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
-            if (tokens.Peek() == 'n') return new StateString(eventManager, path);
+            if (tokens.Peek() == 'n')
+            {
+                ReadNull(type, tokens);
+                return new StateString(eventManager, path);
+            }
+
             var value = ReadString(typeof(string), tokens);
             return new StateString(eventManager, path, value);
         }
 
         private static object DeserializeStruct(Type type, Queue<char> tokens)
         {
+            if (type == typeof(string))
+            {
+                if (tokens.Peek() == 'n')
+                {
+                    ReadNull(type, tokens);
+                    return null;
+                }
+                return ReadString(type, tokens);
+            }
+
+            if (type == typeof(decimal))
+            {
+                return DeserializePrimative(type, tokens);
+            }
+
             var state = Activator.CreateInstance(type);
 
             if (tokens.Dequeue() != '{')
@@ -304,7 +352,7 @@ namespace StateSharp.Json
 
             if (type == typeof(char))
             {
-                return char.Parse(builder.ToString());
+                return char.Parse(builder.ToString().Replace("'", ""));
             }
 
             if (type == typeof(decimal))
@@ -385,10 +433,25 @@ namespace StateSharp.Json
 
         private static void ReadNull(Type type, Queue<char> tokens)
         {
-            if (tokens.Dequeue() != 'n') throw new DeserializationException($"Could not serialize json for {type.FullName}");
-            if (tokens.Dequeue() != 'u') throw new DeserializationException($"Could not serialize json for {type.FullName}");
-            if (tokens.Dequeue() != 'l') throw new DeserializationException($"Could not serialize json for {type.FullName}");
-            if (tokens.Dequeue() != 'l') throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            if (tokens.Dequeue() != 'n')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            if (tokens.Dequeue() != 'u')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            if (tokens.Dequeue() != 'l')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
+
+            if (tokens.Dequeue() != 'l')
+            {
+                throw new DeserializationException($"Could not serialize json for {type.FullName}");
+            }
         }
     }
 }

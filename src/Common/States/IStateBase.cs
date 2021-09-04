@@ -11,6 +11,7 @@ namespace StateSharp.Core.States
         void SubscribeOnChange(Action<IStateEvent> handler);
         void UnsubscribeOnChange(Action<IStateEvent> handler);
 
+        internal IStateEventManager GetEventManager();
         internal void SetEventManager(IStateEventManager eventManager);
         internal IReadOnlyList<IStateBase> GetChildren();
         internal IStateBase Copy(IStateEventManager eventManager);

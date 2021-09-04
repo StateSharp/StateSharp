@@ -36,6 +36,11 @@ namespace StateSharp.Core.States
             _eventManager.Subscribe(Path, handler);
         }
 
+        IStateEventManager IStateBase.GetEventManager()
+        {
+            return _eventManager;
+        }
+
         void IStateBase.SetEventManager(IStateEventManager eventManager)
         {
             _eventManager = eventManager;
