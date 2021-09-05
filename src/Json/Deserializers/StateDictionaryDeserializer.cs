@@ -9,6 +9,14 @@ namespace StateSharp.Json.Deserializers
 {
     internal static class StateDictionaryDeserializer
     {
+        private static readonly Dictionary<Type, Func<Type, IStateEventManager, string, Queue<char>, object>> Deserializers = new()
+        {
+            { typeof(IStateDictionaryBase), Deserialize },
+            { typeof(IStateObjectBase), StateObjectDeserializer.Deserialize },
+            { typeof(IStateStringBase), StateStringDeserializer.Deserialize },
+            { typeof(IStateStructureBase), StateStructureDeserializer.Deserialize },
+        };
+
         public static IStateDictionaryBase Deserialize(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
@@ -26,16 +34,19 @@ namespace StateSharp.Json.Deserializers
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
 
+            var deserializer = Deserializers.Single(x => stateType.GetInterfaces().Contains(x.Key)).Value;
+            var addMethod = state.GetType().GetMethod("Add");
+
             while (true)
             {
-                var field = CommonDeserializer.ReadString(type, tokens);
+                var name = CommonDeserializer.ReadName(type, tokens);
                 if (tokens.Dequeue() != ':')
                 {
                     throw new DeserializationException($"Could not serialize json for {type.FullName}");
                 }
 
-                var value = StateJsonConverter.Deserialize(type.GenericTypeArguments.Single(), eventManager, $"{path}[{field}]", tokens);
-                state.GetType().GetMethod("Add").Invoke(state, new[] { field, value });
+                var value = deserializer(stateType, eventManager, $"{path}[{name}]", tokens);
+                addMethod.Invoke(state, new[] { name, value });
 
                 if (tokens.Peek() == ',')
                 {

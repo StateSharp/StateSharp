@@ -7,6 +7,11 @@ namespace StateSharp.Json.Deserializers
 {
     internal static class CommonDeserializer
     {
+        public static string ReadName(Type type, Queue<char> tokens)
+        {
+            return ReadString(type, tokens);
+        }
+
         public static string ReadString(Type type, Queue<char> tokens)
         {
             var builder = new StringBuilder();

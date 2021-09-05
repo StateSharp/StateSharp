@@ -10,34 +10,38 @@ namespace StateSharp.Json.Deserializers
 {
     internal static class StateStructureDeserializer
     {
+        private static readonly Dictionary<Type, Func<Type, Queue<char>, object>> Deserializers = new()
+        {
+            { typeof(bool), (type, tokens) => DeserializeBool(type, tokens) },
+            { typeof(byte), (type, tokens) => DeserializeByte(type, tokens) },
+            { typeof(sbyte), (type, tokens) => DeserializeSbyte(type, tokens) },
+            { typeof(char), (type, tokens) => DeserializeChar(type, tokens) },
+            { typeof(decimal), (type, tokens) => DeserializeDecimal(type, tokens) },
+            { typeof(double), (type, tokens) => DeserializeDouble(type, tokens) },
+            { typeof(float), (type, tokens) => DeserializeFloat(type, tokens) },
+            { typeof(int), (type, tokens) => DeserializeInt(type, tokens) },
+            { typeof(uint), (type, tokens) => DeserializeUint(type, tokens) },
+            { typeof(long), (type, tokens) => DeserializeLong(type, tokens) },
+            { typeof(ulong), (type, tokens) => DeserializeUlong(type, tokens) },
+            { typeof(short), (type, tokens) => DeserializeShort(type, tokens) },
+            { typeof(ushort), (type, tokens) => DeserializeUshort(type, tokens) },
+            { typeof(string), (type, tokens) => DeserializeString(type, tokens) },
+        };
+
         public static IStateStructureBase Deserialize(Type type, IStateEventManager eventManager, string path, Queue<char> tokens)
         {
             var stateType = type.GenericTypeArguments.Single();
 
-            if (stateType.IsPrimitive)
+            if (Deserializers.TryGetValue(stateType, out var deserializer))
             {
-                return (IStateStructureBase)Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializePrimative(stateType, tokens));
+                return (IStateStructureBase)Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, deserializer(stateType, tokens));
             }
 
             return (IStateStructureBase)Activator.CreateInstance(typeof(StateStructure<>).MakeGenericType(stateType), eventManager, path, DeserializeStruct(stateType, tokens));
         }
-        private static object DeserializeStruct(Type type, Queue<char> tokens)
+
+        public static object DeserializeStruct(Type type, Queue<char> tokens)
         {
-            if (type == typeof(string))
-            {
-                if (tokens.Peek() == 'n')
-                {
-                    CommonDeserializer.ReadNull(type, tokens);
-                    return null;
-                }
-                return CommonDeserializer.ReadString(type, tokens);
-            }
-
-            if (type == typeof(decimal))
-            {
-                return DeserializePrimative(type, tokens);
-            }
-
             var state = Activator.CreateInstance(type);
 
             if (tokens.Dequeue() != '{')
@@ -47,16 +51,16 @@ namespace StateSharp.Json.Deserializers
 
             while (true)
             {
-                var field = CommonDeserializer.ReadString(type, tokens);
+                var name = CommonDeserializer.ReadName(type, tokens);
                 if (tokens.Dequeue() != ':')
                 {
                     throw new DeserializationException($"Could not serialize json for {type.FullName}");
                 }
 
-                var property = type.GetProperty(field);
-                if (property.PropertyType.IsPrimitive)
+                var property = type.GetProperty(name);
+                if (Deserializers.TryGetValue(property.PropertyType, out var deserializer))
                 {
-                    property.SetValue(state, DeserializePrimative(property.PropertyType, tokens));
+                    property.SetValue(state, deserializer(property.PropertyType, tokens));
                 }
                 else
                 {
@@ -81,80 +85,151 @@ namespace StateSharp.Json.Deserializers
             return state;
         }
 
-        private static object DeserializePrimative(Type type, Queue<char> tokens)
+        public static bool DeserializeBool(Type type, Queue<char> tokens)
         {
             var builder = new StringBuilder();
             while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
                 builder.Append(tokens.Dequeue());
             }
+            return bool.Parse(builder.ToString());
+        }
 
-            if (type == typeof(bool))
+        public static byte DeserializeByte(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return bool.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
+            }
+            return byte.Parse(builder.ToString());
+        }
+
+        public static sbyte DeserializeSbyte(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
+            {
+                builder.Append(tokens.Dequeue());
+            }
+            return sbyte.Parse(builder.ToString());
+        }
+
+        public static char DeserializeChar(Type type, Queue<char> tokens)
+        {
+            if (tokens.Dequeue() != '\'')
+            {
+                throw new Exception();
             }
 
-            if (type == typeof(byte))
+            var result = tokens.Dequeue();
+
+            if (tokens.Dequeue() != '\'')
             {
-                return byte.Parse(builder.ToString());
+                throw new Exception();
             }
 
-            if (type == typeof(sbyte))
-            {
-                return sbyte.Parse(builder.ToString());
-            }
+            return result;
+        }
 
-            if (type == typeof(char))
+        public static decimal DeserializeDecimal(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return char.Parse(builder.ToString().Replace("'", ""));
+                builder.Append(tokens.Dequeue());
             }
+            return decimal.Parse(builder.ToString());
+        }
 
-            if (type == typeof(decimal))
+        public static double DeserializeDouble(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return decimal.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return double.Parse(builder.ToString());
+        }
 
-            if (type == typeof(double))
+        public static float DeserializeFloat(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return double.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return float.Parse(builder.ToString());
+        }
 
-            if (type == typeof(float))
+        public static int DeserializeInt(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return float.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return int.Parse(builder.ToString());
+        }
 
-            if (type == typeof(int))
+        public static uint DeserializeUint(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return int.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return uint.Parse(builder.ToString());
+        }
 
-            if (type == typeof(uint))
+        public static long DeserializeLong(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return uint.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return long.Parse(builder.ToString());
+        }
 
-            if (type == typeof(long))
+        public static ulong DeserializeUlong(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return long.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return ulong.Parse(builder.ToString());
+        }
 
-            if (type == typeof(ulong))
+        public static short DeserializeShort(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return ulong.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return short.Parse(builder.ToString());
+        }
 
-            if (type == typeof(short))
+        public static ushort DeserializeUshort(Type type, Queue<char> tokens)
+        {
+            var builder = new StringBuilder();
+            while (tokens.Peek() != ',' && tokens.Peek() != '}')
             {
-                return short.Parse(builder.ToString());
+                builder.Append(tokens.Dequeue());
             }
+            return ushort.Parse(builder.ToString());
+        }
 
-            if (type == typeof(ushort))
+        public static string DeserializeString(Type type, Queue<char> tokens)
+        {
+            if (tokens.Peek() == 'n')
             {
-                return ushort.Parse(builder.ToString());
+                CommonDeserializer.ReadNull(type, tokens);
+                return null;
             }
-
-            throw new DeserializationException($"Unknown primative {type.FullName}");
+            return CommonDeserializer.ReadString(type, tokens);
         }
     }
 }

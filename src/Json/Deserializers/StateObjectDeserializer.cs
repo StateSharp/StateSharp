@@ -28,14 +28,14 @@ namespace StateSharp.Json.Deserializers
 
             while (true)
             {
-                var field = CommonDeserializer.ReadString(type, tokens);
+                var name = CommonDeserializer.ReadName(type, tokens);
                 if (tokens.Dequeue() != ':')
                 {
                     throw new DeserializationException($"Could not serialize json for {type.FullName}");
                 }
 
-                var property = stateType.GetProperty(field);
-                var value = StateJsonConverter.Deserialize(property.PropertyType, eventManager, $"{path}.{field}", tokens);
+                var property = stateType.GetProperty(name);
+                var value = StateJsonConverter.Deserialize(property.PropertyType, eventManager, $"{path}.{name}", tokens);
                 property.SetValue(state, value);
 
                 if (tokens.Peek() == ',')

@@ -8,22 +8,22 @@ namespace StateSharp.Json.Serializers
 {
     internal static class StateStructureSerializer
     {
-        private static Dictionary<Type, Func<object, string>> Serializers = new Dictionary<Type, Func<object, string>>()
+        private static readonly Dictionary<Type, Func<object, string>> Serializers = new()
         {
-            {typeof(bool), state => Serialize((bool) state)},
-            {typeof(byte), state => Serialize((byte) state)},
-            {typeof(sbyte), state => Serialize((sbyte) state)},
-            {typeof(char), state => Serialize((char) state)},
-            {typeof(decimal), state => Serialize((decimal) state)},
-            {typeof(double), state => Serialize((double) state)},
-            {typeof(float), state => Serialize((float) state)},
-            {typeof(int), state => Serialize((int) state)},
-            {typeof(uint), state => Serialize((uint) state)},
-            {typeof(long), state => Serialize((long) state)},
-            {typeof(ulong), state => Serialize((ulong) state)},
-            {typeof(short), state => Serialize((short) state)},
-            {typeof(ushort), state => Serialize((ushort) state)},
-            {typeof(string), state => Serialize((string) state)},
+            { typeof(bool), state => Serialize((bool)state) },
+            { typeof(byte), state => Serialize((byte)state) },
+            { typeof(sbyte), state => Serialize((sbyte)state) },
+            { typeof(char), state => Serialize((char)state) },
+            { typeof(decimal), state => Serialize((decimal)state) },
+            { typeof(double), state => Serialize((double)state) },
+            { typeof(float), state => Serialize((float)state) },
+            { typeof(int), state => Serialize((int)state) },
+            { typeof(uint), state => Serialize((uint)state) },
+            { typeof(long), state => Serialize((long)state) },
+            { typeof(ulong), state => Serialize((ulong)state) },
+            { typeof(short), state => Serialize((short)state) },
+            { typeof(ushort), state => Serialize((ushort)state) },
+            { typeof(string), state => Serialize((string)state) },
         };
 
         public static string Serialize(IStateStructureBase state)
