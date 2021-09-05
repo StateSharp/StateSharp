@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Common\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Deserializers\" />
+  </ItemGroup>
+
 </Project>

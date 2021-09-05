@@ -21,7 +21,7 @@ namespace StateSharp.UnitTests.Json.Serialize
         {
             var manager = StateManagerConstructor.New<ComplexObject>();
             manager.Init();
-            Assert.AreEqual("{\"String\":null,\"Object\":null,\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Nint\":0,\"Nuint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":null,\"PrimativeDictionary\":null,\"StructureDictionary\":null,\"ObjectDictionary\":null}", StateJsonConverter.Serialize(manager));
+            Assert.AreEqual("{\"String\":null,\"Object\":null,\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":null,\"PrimativeDictionary\":null,\"StructureDictionary\":null,\"ObjectDictionary\":null}", StateJsonConverter.Serialize(manager));
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace StateSharp.UnitTests.Json.Serialize
             manager.State.PrimativeDictionary.Init();
             manager.State.StringDictionary.Init();
             manager.State.StructureDictionary.Init();
-            Assert.AreEqual("{\"String\":null,\"Object\":{\"String\":null,\"Object\":null,\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Nint\":0,\"Nuint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":null,\"PrimativeDictionary\":null,\"StructureDictionary\":null,\"ObjectDictionary\":null},\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Nint\":0,\"Nuint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":{},\"PrimativeDictionary\":{},\"StructureDictionary\":{},\"ObjectDictionary\":{}}", StateJsonConverter.Serialize(manager));
+            Assert.AreEqual("{\"String\":null,\"Object\":{\"String\":null,\"Object\":null,\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":null,\"PrimativeDictionary\":null,\"StructureDictionary\":null,\"ObjectDictionary\":null},\"Structure\":{\"String\":null,\"Vector3\":{\"X\":0,\"Y\":0,\"Z\":0},\"Bool\":false,\"Byte\":0,\"Sbyte\":0,\"Char\":'\0',\"Decimal\":0,\"Double\":0,\"Float\":0,\"Int\":0,\"Uint\":0,\"Long\":0,\"Ulong\":0,\"Short\":0,\"Ushort\":0},\"StringDictionary\":{},\"PrimativeDictionary\":{},\"StructureDictionary\":{},\"ObjectDictionary\":{}}", StateJsonConverter.Serialize(manager));
         }
 
         [TestMethod]
