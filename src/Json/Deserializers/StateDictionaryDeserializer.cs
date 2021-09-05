@@ -34,6 +34,12 @@ namespace StateSharp.Json.Deserializers
                 throw new DeserializationException($"Could not serialize json for {type.FullName}");
             }
 
+            if (tokens.Peek() == '}')
+            {
+                tokens.Dequeue();
+                return (IStateDictionaryBase)Activator.CreateInstance(typeof(StateDictionary<>).MakeGenericType(stateType), eventManager, path, state);
+            }
+
             var deserializer = Deserializers.Single(x => stateType.GetInterfaces().Contains(x.Key)).Value;
             var addMethod = state.GetType().GetMethod("Add");
 
