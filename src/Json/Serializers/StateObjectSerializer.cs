@@ -1,9 +1,9 @@
-﻿using StateSharp.Core.States;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StateSharp.Core.States;
 
-namespace StateSharp.Json.Serializers.States
+namespace StateSharp.Json.Serializers
 {
     internal static class StateObjectSerializer
     {

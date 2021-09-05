@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace StateSharp.Json.Serializers.States
+namespace StateSharp.Json.Serializers
 {
     internal static class StateStructureSerializer
     {
@@ -122,7 +122,7 @@ namespace StateSharp.Json.Serializers.States
 
         public static string Serialize(string state)
         {
-            return state == null ? "null" : $"\"{state}\"";
+            return CommonSerializer.Serialize(state);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using StateSharp.Core.States;
 
-namespace StateSharp.Json.Serializers.States
+namespace StateSharp.Json.Serializers
 {
     internal static class StateStringSerializer
     {
         public static string Serialize(IStateStringBase state)
         {
-            return state.GetState() == null ? "null" : $"\"{state.GetState()}\"";
+            return CommonSerializer.Serialize((string)state.GetState());
         }
     }
 }
