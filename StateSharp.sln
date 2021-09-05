@@ -17,7 +17,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Srcs", "Srcs", "{88723277-0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "State", "src\State\State.csproj", "{66365894-9D13-4A91-AF8A-97503F1EC311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Json", "src\Json\Json.csproj", "{1D2FFE88-FDE1-4382-8148-7630EC25510F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Json", "src\Json\Json.csproj", "{1D2FFE88-FDE1-4382-8148-7630EC25510F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{435A2C35-79C3-4462-BBE0-B45F367B854C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{2FD083B0-5168-4420-96DE-6C0883C654A5}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{341458D1-0000-4126-9C85-8EA0C68AB6A1}"
+	ProjectSection(SolutionItems) = preProject
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +83,9 @@ Global
 		{0996B88D-188A-4969-8B6C-D79D2491B633} = {15FA1CDD-58E7-4D21-800C-BE5DEDDAB795}
 		{66365894-9D13-4A91-AF8A-97503F1EC311} = {15FA1CDD-58E7-4D21-800C-BE5DEDDAB795}
 		{1D2FFE88-FDE1-4382-8148-7630EC25510F} = {88723277-0873-4145-AB6B-99A87A7A3D1D}
+		{435A2C35-79C3-4462-BBE0-B45F367B854C} = {BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}
+		{2FD083B0-5168-4420-96DE-6C0883C654A5} = {435A2C35-79C3-4462-BBE0-B45F367B854C}
+		{341458D1-0000-4126-9C85-8EA0C68AB6A1} = {BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6E1CAE-9A89-4723-88B2-2C24F1185D6C}
