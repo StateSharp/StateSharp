@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using StateSharp.Core.Events;
+﻿using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.States;
+using System;
+using System.Linq;
 
 namespace StateSharp.Core.Constructors
 {
@@ -10,7 +10,7 @@ namespace StateSharp.Core.Constructors
     {
         internal static T ConstructState<T>(IStateEventManager eventManager, string path)
         {
-            return (T) ConstructState(typeof(T), eventManager, path);
+            return (T)ConstructState(typeof(T), eventManager, path);
         }
 
         internal static object ConstructState(Type type, IStateEventManager eventManager, string path)
@@ -53,7 +53,7 @@ namespace StateSharp.Core.Constructors
 
         internal static T ConstructInternal<T>(IStateEventManager eventManager, string path) where T : IStateBase
         {
-            return (T) ConstructInternal(typeof(T), eventManager, path);
+            return (T)ConstructInternal(typeof(T), eventManager, path);
         }
 
         internal static object ConstructInternal(Type type, IStateEventManager eventManager, string path)
@@ -67,6 +67,10 @@ namespace StateSharp.Core.Constructors
             else if (interfaces.Contains(typeof(IStateObjectBase)))
             {
                 result = Activator.CreateInstance(typeof(StateObject<>).MakeGenericType(type.GenericTypeArguments), eventManager, path);
+            }
+            else if (interfaces.Contains(typeof(IStateStringBase)))
+            {
+                result = Activator.CreateInstance(typeof(StateString), eventManager, path);
             }
             else if (interfaces.Contains(typeof(IStateStructureBase)))
             {

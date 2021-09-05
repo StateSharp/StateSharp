@@ -4,6 +4,25 @@ namespace State.Complex
 {
     public struct ComplexStructure
     {
+        public ComplexStructure(string @string, Vector3 @vector3, bool @bool, byte @byte, sbyte @sbyte, char @char, decimal @decimal, double @double, float @float, int @int, uint @uint, long @long, ulong @ulong, short @short, ushort @ushort)
+        {
+            String = @string;
+            Vector3 = vector3;
+            Bool = @bool;
+            Byte = @byte;
+            Sbyte = @sbyte;
+            Char = @char;
+            Decimal = @decimal;
+            Double = @double;
+            Float = @float;
+            Int = @int;
+            Uint = @uint;
+            Long = @long;
+            Ulong = @ulong;
+            Short = @short;
+            Ushort = @ushort;
+        }
+
         // String
         public string String { get; private set; }
 
@@ -20,8 +39,6 @@ namespace State.Complex
         public float Float { get; private set; }
         public int Int { get; private set; }
         public uint Uint { get; private set; }
-        public nint Nint { get; private set; }
-        public nuint Nuint { get; private set; }
         public long Long { get; private set; }
         public ulong Ulong { get; private set; }
         public short Short { get; private set; }
