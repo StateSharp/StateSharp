@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: ./bin/ci/dotnet/restore.sh
     - name: Build
-      run: dotnet build --no-restore
+      run: ./bin/ci/dotnet/build.sh
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: ./bin/ci/dotnet/test.sh
