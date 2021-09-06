@@ -1,4 +1,4 @@
-﻿namespace StateSharp.Client
+﻿namespace StateSharp.Networking.Client
 {
     public static class StateClientConstructor
     {

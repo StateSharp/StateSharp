@@ -1,7 +1,11 @@
-﻿namespace StateSharp.Client
+﻿using StateSharp.Core;
+
+namespace StateSharp.Networking.Client
 {
-    public interface IStateClient<out T> where T : class
+    public interface IStateClient<T> : IStateManager<T> where T : class
     {
-        T State { get; }
+        bool Connected { get; }
+        void Connect(string hostname, int port);
+        void Close();
     }
 }

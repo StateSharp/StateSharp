@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>StateSharp.Server</AssemblyName>
-    <RootNamespace>StateSharp.Server</RootNamespace>
+    <AssemblyName>StateSharp.Networking.Server</AssemblyName>
+    <RootNamespace>StateSharp.Networking.Server</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

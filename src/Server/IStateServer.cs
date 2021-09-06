@@ -1,8 +1,9 @@
-﻿namespace StateSharp.Server
+﻿using StateSharp.Core;
+
+namespace StateSharp.Networking.Server
 {
-    public interface IStateServer<out T> where T : class
+    public interface IStateServer<T> : IStateManager<T> where T : class
     {
-        T State { get; }
         void Start();
         void Stop();
     }

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace StateSharp.Server
+namespace StateSharp.Networking.Server
 {
     public static class StateServerConstructor
     {
