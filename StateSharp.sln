@@ -42,6 +42,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{3414
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{98D70F4B-3ADC-42F9-808D-80CC7222A907}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,7 @@ Global
 		{435A2C35-79C3-4462-BBE0-B45F367B854C} = {BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}
 		{2FD083B0-5168-4420-96DE-6C0883C654A5} = {435A2C35-79C3-4462-BBE0-B45F367B854C}
 		{341458D1-0000-4126-9C85-8EA0C68AB6A1} = {BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}
+		{98D70F4B-3ADC-42F9-808D-80CC7222A907} = {BEAE8BE4-29F3-4BCB-81B6-FA7D2AA27B92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6E1CAE-9A89-4723-88B2-2C24F1185D6C}
