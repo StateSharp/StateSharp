@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using State.State;
 using StateSharp.Core;
 using StateSharp.Json;
+using StateSharp.Tests.State.State;
 
-namespace StateSharp.UnitTests.Json.Serialize
+namespace StateSharp.Tests.UnitTests.Json.Serialize
 {
     [TestClass]
     public class GameStateTest

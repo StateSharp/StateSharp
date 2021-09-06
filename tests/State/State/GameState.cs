@@ -1,6 +1,6 @@
 ﻿using StateSharp.Core.States;
 
-namespace State.State
+namespace StateSharp.Tests.State.State
 {
     public class GameState
     {

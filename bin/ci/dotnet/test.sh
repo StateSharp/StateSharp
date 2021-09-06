@@ -2,10 +2,8 @@
 
 set -euo pipefail
 
-wget -O ./opencover.zip https://github.com/OpenCover/opencover/releases/download/4.7.1221/opencover.4.7.1221.zip
-unzip opencover.zip -d ./bin/opencover
-find ./bin/opencover
-
-# dotnet test --no-build --verbosity normal
+dotnet test --collect:"XPlat Code Coverage" --settings:coverlet.runsettings
+wget https://github.com/codecov/codecov-bash/releases/download/1.0.5/codecov
+./codecov -f $(find ./tests/UnitTests/TestResults/)
 
 exit 0

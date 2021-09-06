@@ -3,4 +3,4 @@
 [assembly: InternalsVisibleTo("StateSharp.Json")]
 [assembly: InternalsVisibleTo("StateSharp.Client")]
 [assembly: InternalsVisibleTo("StateSharp.Server")]
-[assembly: InternalsVisibleTo("StateSharp.UnitTests")]
+[assembly: InternalsVisibleTo("StateSharp.Tests.UnitTests")]

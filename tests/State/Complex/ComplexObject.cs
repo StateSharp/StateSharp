@@ -1,6 +1,6 @@
 ﻿using StateSharp.Core.States;
 
-namespace State.Complex
+namespace StateSharp.Tests.State.Complex
 {
     public class ComplexObject
     {

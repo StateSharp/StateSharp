@@ -1,6 +1,6 @@
-﻿using State.State;
+﻿using StateSharp.Tests.State.State;
 
-namespace State.Complex
+namespace StateSharp.Tests.State.Complex
 {
     public struct ComplexStructure
     {

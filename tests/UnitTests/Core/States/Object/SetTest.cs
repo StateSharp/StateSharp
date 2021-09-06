@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using State.State;
 using StateSharp.Core;
+using StateSharp.Tests.State.State;
 
-namespace StateSharp.UnitTests.Core.States.Object
+namespace StateSharp.Tests.UnitTests.Core.States.Object
 {
     [TestClass]
     public class SetTest

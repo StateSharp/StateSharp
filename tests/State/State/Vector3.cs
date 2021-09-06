@@ -1,4 +1,4 @@
-﻿namespace State.State
+﻿namespace StateSharp.Tests.State.State
 {
     public struct Vector3
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using State.State;
 using StateSharp.Core;
 using StateSharp.Core.Events;
+using StateSharp.Tests.State.State;
 
-namespace StateSharp.UnitTests.Core.Events.Dictionary
+namespace StateSharp.Tests.UnitTests.Core.Events.Dictionary
 {
     [TestClass]
     public class RemoveTest

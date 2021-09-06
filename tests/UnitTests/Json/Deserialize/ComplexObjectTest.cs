@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using State.Complex;
 using StateSharp.Core;
 using StateSharp.Core.States;
 using StateSharp.Json;
+using StateSharp.Tests.State.Complex;
 
-namespace StateSharp.UnitTests.Json.Deserialize
+namespace StateSharp.Tests.UnitTests.Json.Deserialize
 {
     [TestClass]
     public class ComplexObjectTest
