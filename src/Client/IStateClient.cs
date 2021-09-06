@@ -6,6 +6,7 @@ namespace StateSharp.Networking.Client
     {
         bool Connected { get; }
         void Connect(string hostname, int port);
+        void SyncState();
         void Close();
     }
 }

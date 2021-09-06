@@ -12,11 +12,13 @@ namespace StateSharp.Networking.Server
     internal class StateServer<T> : IStateServer<T> where T : class
     {
         private readonly TcpListener _listener;
+        private readonly List<TcpClient> _clients;
         private readonly IStateManager<T> _manager;
 
         public StateServer(IPAddress ipAddress, int port)
         {
             _manager = StateManagerConstructor.New<T>();
+            _clients = new List<TcpClient>();
             _listener = new TcpListener(ipAddress, port);
         }
 
@@ -87,6 +89,24 @@ namespace StateSharp.Networking.Server
         public void Start()
         {
             _listener.Start();
+        }
+
+        public bool Pending()
+        {
+            return _listener.Pending();
+        }
+
+        public void AcceptClient()
+        {
+            _clients.Add(_listener.AcceptTcpClient());
+        }
+
+        public void AcceptClients()
+        {
+            while (_listener.Pending())
+            {
+                _clients.Add(_listener.AcceptTcpClient());
+            }
         }
 
         public void Stop()

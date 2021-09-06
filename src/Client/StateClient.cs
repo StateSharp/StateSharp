@@ -31,6 +31,11 @@ namespace StateSharp.Networking.Client
             _client.Connect(hostname, port);
         }
 
+        public void SyncState()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Close()
         {
             _client.Close();
