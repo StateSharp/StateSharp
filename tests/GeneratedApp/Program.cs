@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeneratedApp
+namespace StateSharp.Tests.GeneratedApp
 {
     class Program
     {

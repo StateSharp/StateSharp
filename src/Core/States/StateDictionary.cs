@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using StateSharp.Core.Constructors;
+﻿using StateSharp.Core.Constructors;
 using StateSharp.Core.Events;
 using StateSharp.Core.Exceptions;
 using StateSharp.Core.Transactions;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace StateSharp.Core.States
 {
@@ -66,7 +66,7 @@ namespace StateSharp.Core.States
 
         public IStateTransaction<IStateDictionary<T>> BeginTransaction()
         {
-            return new StateTransaction<IStateDictionary<T>>(this, em => ((IStateDictionary<T>) this).Copy(em));
+            return new StateTransaction<IStateDictionary<T>>(this, em => ((IStateDictionary<T>)this).Copy(em));
         }
 
         public void Commit(IStateTransaction<IStateDictionary<T>> transaction)
@@ -78,7 +78,7 @@ namespace StateSharp.Core.States
 
             _state = transaction.State.GetStateRef();
 
-            var queue = new Queue<IStateBase>(((IStateBase) this).GetChildren());
+            var queue = new Queue<IStateBase>(((IStateBase)this).GetChildren());
             while (queue.TryDequeue(out var state))
             {
                 state.SetEventManager(_eventManager);
@@ -123,7 +123,7 @@ namespace StateSharp.Core.States
 
         IReadOnlyDictionary<string, object> IStateDictionaryBase.GetState()
         {
-            return _state == null ? null : new ReadOnlyDictionary<string, object>(State.ToDictionary(x => x.Key, x => (object) x.Value));
+            return _state == null ? null : new ReadOnlyDictionary<string, object>(State.ToDictionary(x => x.Key, x => (object)x.Value));
         }
 
         IStateDictionary<T> IStateDictionary<T>.Copy(IStateEventManager eventManager)
@@ -136,7 +136,7 @@ namespace StateSharp.Core.States
             var state = new Dictionary<string, T>();
             foreach (var (key, value) in State)
             {
-                state.Add(key, (T) value.Copy(eventManager));
+                state.Add(key, (T)value.Copy(eventManager));
             }
 
             return new StateDictionary<T>(eventManager, Path, state);
@@ -144,7 +144,7 @@ namespace StateSharp.Core.States
 
         IStateBase IStateBase.Copy(IStateEventManager eventManager)
         {
-            return ((IStateDictionary<T>) this).Copy(eventManager);
+            return ((IStateDictionary<T>)this).Copy(eventManager);
         }
     }
 }
