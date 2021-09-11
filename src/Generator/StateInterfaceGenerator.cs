@@ -1,18 +1,16 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Text;
 
 namespace StateSharp.Generator
 {
     [Generator]
-    public class MyGenerator : ISourceGenerator
+    public class StateInterfaceGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var source = "class Foo { }";
+            var builder = new StringBuilder();
 
-            if (source != null)
-            {
-                context.AddSource("generated.cs", source);
-            }
+            context.AddSource("generated.cs", builder.ToString());
         }
 
         public void Initialize(GeneratorInitializationContext context)

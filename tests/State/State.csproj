@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>StateSharp.Tests.State</AssemblyName>
-    <RootNamespace>StateSharp.Tests.State</RootNamespace>
+	  <TargetFramework>net5.0</TargetFramework>
+	  <LangVersion>9</LangVersion>
+	  <Nullable>enable</Nullable>
+	  <AssemblyName>StateSharp.Tests.State</AssemblyName>
+	  <RootNamespace>StateSharp.Tests.State</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\Core.csproj" />
+	  <ProjectReference Include="..\..\src\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-
-    <IsPackable>false</IsPackable>
-
-    <AssemblyName>StateSharp.Tests.UnitTests</AssemblyName>
-
-    <RootNamespace>StateSharp.Tests.UnitTests</RootNamespace>
+	  <TargetFramework>net5.0</TargetFramework>
+	  <IsPackable>false</IsPackable>
+	  <LangVersion>9</LangVersion>
+	  <Nullable>enable</Nullable>
+	  <AssemblyName>StateSharp.Tests.UnitTests</AssemblyName>
+	  <RootNamespace>StateSharp.Tests.UnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
