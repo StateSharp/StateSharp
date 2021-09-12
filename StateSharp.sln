@@ -60,7 +60,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "src\Generator\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneratedApp", "tests\GeneratedApp\GeneratedApp.csproj", "{DAFF296F-0C37-419B-BEFA-2317441704B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratedState", "tests\GeneratedState\GeneratedState.csproj", "{E6447FA0-FFD6-4700-A26B-877C00F4392C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneratedState", "tests\GeneratedState\GeneratedState.csproj", "{E6447FA0-FFD6-4700-A26B-877C00F4392C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

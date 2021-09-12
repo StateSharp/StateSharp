@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StateSharp.Generator.Builders;
 using System;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Text;
 namespace StateSharp.Generator
 {
     [Generator]
-    public class StateInterfaceGenerator : ISourceGenerator
+    public class StateGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
@@ -15,14 +16,11 @@ namespace StateSharp.Generator
 
             foreach (var tree in context.Compilation.SyntaxTrees)
             {
-                foreach (var stateClass in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToFullString().Contains("[State]"))))
+                foreach (var @class in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateObject]"))))
                 {
-                    var ns = GetNamespace(stateClass);
-                    builder.AppendLine(ns);
+                    StateFileBuilder.Build(context, GetNamespace(@class), @class);
                 }
             }
-
-            context.AddSource("generated.cs", builder.ToString());
         }
 
         public void Initialize(GeneratorInitializationContext context)
@@ -41,7 +39,7 @@ namespace StateSharp.Generator
                     throw new NullReferenceException();
                 }
             }
-            return ((NamespaceDeclarationSyntax)node).Name.ToFullString();
+            return ((NamespaceDeclarationSyntax)node).Name.ToFullString().TrimEnd();
         }
     }
 }

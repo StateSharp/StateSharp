@@ -2,7 +2,7 @@
 
 namespace StateSharp.Core.Attributes
 {
-    public class StateAttribute : Attribute
+    public class StateObjectAttribute : Attribute
     {
 
     }
