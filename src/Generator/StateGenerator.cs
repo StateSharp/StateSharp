@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using StateSharp.Generator.Builders;
 using System;
 using System.Linq;
-using System.Text;
 
 namespace StateSharp.Generator
 {
@@ -12,8 +11,6 @@ namespace StateSharp.Generator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var builder = new StringBuilder();
-
             foreach (var tree in context.Compilation.SyntaxTrees)
             {
                 foreach (var @class in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateObject]"))))
