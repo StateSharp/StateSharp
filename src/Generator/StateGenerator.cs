@@ -1,8 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using StateSharp.Generator.Builders;
-using System;
-using System.Linq;
+using StateSharp.Generator.Parsers;
 
 namespace StateSharp.Generator
 {
@@ -11,32 +8,12 @@ namespace StateSharp.Generator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            foreach (var tree in context.Compilation.SyntaxTrees)
-            {
-                foreach (var @class in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateObject]"))))
-                {
-                    StateFileBuilder.Build(context, GetNamespace(@class), @class);
-                }
-            }
+            var classModels = ClassParser.Parse(context);
         }
 
         public void Initialize(GeneratorInitializationContext context)
         {
 
-        }
-
-        private string GetNamespace(ClassDeclarationSyntax classDeclarationSyntax)
-        {
-            var node = classDeclarationSyntax.Parent;
-            while (node is not NamespaceDeclarationSyntax)
-            {
-                node = node?.Parent;
-                if (node == null)
-                {
-                    throw new NullReferenceException();
-                }
-            }
-            return ((NamespaceDeclarationSyntax)node).Name.ToFullString().TrimEnd();
         }
     }
 }
