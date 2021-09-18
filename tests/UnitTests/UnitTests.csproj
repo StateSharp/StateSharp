@@ -24,9 +24,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Json\Json.csproj" />
-    <ProjectReference Include="..\State\State.csproj" />
-  </ItemGroup>
-
 </Project>
