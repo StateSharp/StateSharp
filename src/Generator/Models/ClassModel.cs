@@ -6,9 +6,9 @@ namespace StateSharp.Generator.Models
     {
         public string Name { get; }
         public string Namespace { get; }
-        public Dictionary<string, string> Fields { get; }
+        public List<FieldModel> Fields { get; }
 
-        public ClassModel(string name, string @namespace, Dictionary<string, string> fields)
+        public ClassModel(string name, string @namespace, List<FieldModel> fields)
         {
             Name = name;
             Namespace = @namespace;

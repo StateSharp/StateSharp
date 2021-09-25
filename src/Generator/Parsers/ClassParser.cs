@@ -15,7 +15,7 @@ namespace StateSharp.Generator.Parsers
             {
                 foreach (var @class in tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateObject]"))))
                 {
-                    models.Add(new ClassModel($"{@class.Identifier.Text}State", NamespaceParser.Parse(@class), FieldsParser.Parse(@class)));
+                    models.Add(new ClassModel($"{@class.Identifier.Text}State", NamespaceParser.Parse(@class), FieldParser.Parse(@class)));
                 }
             }
             return models;
