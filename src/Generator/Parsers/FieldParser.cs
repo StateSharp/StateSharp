@@ -10,17 +10,17 @@ namespace StateSharp.Generator.Parsers
         public static List<FieldModel> Parse(ClassDeclarationSyntax @class)
         {
             var fields = new List<FieldModel>();
-            foreach (var member in @class.Members.Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateProperty]"))))
+            foreach (var member in @class.Members.OfType<PropertyDeclarationSyntax>().Where(x => x.AttributeLists.Any(y => y.ToString().Equals("[StateProperty]"))))
             {
                 fields.Add(Parse(member));
             }
             return fields;
         }
 
-        public static FieldModel Parse(MemberDeclarationSyntax member)
+        public static FieldModel Parse(PropertyDeclarationSyntax member)
         {
-            var name = string.Empty;
-            var type = TypeParser.Parse();
+            var name = member.Identifier.ToString();
+            var type = TypeParser.Parse(member.Type);
             return new FieldModel(name, type);
         }
     }
